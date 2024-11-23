@@ -1,7 +1,7 @@
 import { generateEmailVerificationCode, sendVerificationCode } from '@/lib/utils.server';
-import { sendRegistrationCodeSchema } from '@/schemas/auth';
+import { users } from '@/server/db/schema';
+import { sendRegistrationCodeSchema } from '@/server/schemas/auth';
 import type { ContextVariables } from '@/server/types';
-import { users } from '@/services/db/schema';
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi';
 import { eq } from 'drizzle-orm';
 import { HTTPException } from 'hono/http-exception';
@@ -14,7 +14,8 @@ export const sendRegistrationCode = new OpenAPIHono<{
         method: 'post',
         path: '/api/auth/register/send-registration-code',
         tags: ['Auth'],
-        summary: 'Emails the user a temporary registration code',
+        summary: 'Start Registration',
+        description: 'Emails the user a temporary registration code',
         request: {
             body: {
                 description: 'Request body',

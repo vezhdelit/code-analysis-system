@@ -32,4 +32,4 @@ EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
-CREATE UNIQUE INDEX IF NOT EXISTS "normalized_email_idx" ON "users" ("normalized_email");
+CREATE UNIQUE INDEX IF NOT EXISTS "normalized_email_idx" ON "users" USING btree ("normalized_email");

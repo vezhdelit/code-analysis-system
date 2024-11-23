@@ -1,8 +1,8 @@
 import { hashPassword } from '@/lib/utils.server';
-import { verifySchema } from '@/schemas/auth';
+import { lucia } from '@/server/auth';
+import { emailVerificationCodes, users } from '@/server/db/schema';
+import { verifySchema } from '@/server/schemas/auth';
 import type { ContextVariables } from '@/server/types';
-import { lucia } from '@/services/auth';
-import { emailVerificationCodes, users } from '@/services/db/schema';
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi';
 import { eq } from 'drizzle-orm';
 import { setCookie } from 'hono/cookie';
@@ -16,7 +16,8 @@ export const verify = new OpenAPIHono<{
         method: 'post',
         path: '/api/auth/register/verify',
         tags: ['Auth'],
-        summary: 'Verifies the confirmation code and stores the password hash.',
+        summary: 'Verify Registration',
+        description: 'Verifies the confirmation code and stores the password hash.',
         request: {
             body: {
                 description: 'Request body',

@@ -1,6 +1,6 @@
 import { VerificationForm } from '@/components/features/auth/verification-form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Routes } from '@/lib/routes';
+import { ROUTE_PATH } from '@/constants/routes.constant';
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
@@ -17,7 +17,7 @@ export default async function VerifyPage(props: {
     const { email } = searchParams;
 
     if (!email || Array.isArray(email)) {
-        return redirect(Routes.register());
+        return redirect(ROUTE_PATH.register);
     }
 
     return (

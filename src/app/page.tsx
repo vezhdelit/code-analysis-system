@@ -1,7 +1,7 @@
 import { ClientUser } from '@/components/features/auth/client-user';
 import { ThemeToggle } from '@/components/features/theme/theme-toggle';
 import { Button } from '@/components/ui/button';
-import { Routes } from '@/lib/routes';
+import { ROUTE_PATH } from '@/constants/routes.constant';
 import { getUser } from '@/lib/utils.server';
 import { AuthProvider } from '@/providers/auth-provider';
 import { logout } from '@/server/actions';
@@ -16,10 +16,10 @@ export default async function Page() {
                 <ThemeToggle />
                 <div className='flex items-center gap-4'>
                     <Button asChild className='w-28'>
-                        <Link href={Routes.login()}>Login</Link>
+                        <Link href={ROUTE_PATH.login}>Login</Link>
                     </Button>
                     <Button asChild className='w-28' variant='outline'>
-                        <Link href={Routes.register()}>Register</Link>
+                        <Link href={ROUTE_PATH.register}>Register</Link>
                     </Button>
                 </div>
             </div>

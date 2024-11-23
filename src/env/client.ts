@@ -3,10 +3,10 @@ import { z } from 'zod';
 
 export const clientEnvs = createEnv({
     client: {
-        NEXT_PUBLIC_DOMAIN: z.string(),
+        NEXT_PUBLIC_BASE_URL: z.string(),
     },
     experimental__runtimeEnv: {
-        NEXT_PUBLIC_DOMAIN: process.env.NEXT_PUBLIC_DOMAIN,
+        NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
     },
     emptyStringAsUndefined: true,
 });

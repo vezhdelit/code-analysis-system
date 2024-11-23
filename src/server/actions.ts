@@ -1,7 +1,7 @@
 'use server';
 
-import { Routes } from '@/lib/routes';
-import { lucia } from '@/services/auth';
+import { ROUTE_PATH } from '@/constants/routes.constant';
+import { lucia } from '@/server/auth';
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
@@ -10,7 +10,7 @@ export async function logout() {
     const sessionId = (await cookies()).get(lucia.sessionCookieName)?.value;
 
     if (!sessionId) {
-        return redirect(Routes.home());
+        return redirect(ROUTE_PATH.home);
     }
 
     await lucia.invalidateSession(sessionId);
@@ -19,5 +19,5 @@ export async function logout() {
         sameSite: 'strict',
     });
     revalidatePath('/');
-    return redirect(Routes.home());
+    return redirect(ROUTE_PATH.home);
 }

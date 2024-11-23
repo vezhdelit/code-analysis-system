@@ -20,7 +20,7 @@ import {
 import { PasswordInput } from '@/components/ui/password-input';
 import { useVerify } from '@/hooks/use-auth';
 import { cn } from '@/lib/utils';
-import { type Verify, verifySchema } from '@/schemas/auth';
+import { type Verify, verifySchema } from '@/server/schemas/auth';
 import { ErrorMessage } from '@hookform/error-message';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';

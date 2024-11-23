@@ -12,10 +12,10 @@ import {
     FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { ROUTE_PATH } from '@/constants/routes.constant';
 import { useRegister } from '@/hooks/use-auth';
-import { Routes } from '@/lib/routes';
 import { cn } from '@/lib/utils';
-import { type SendRegistrationCode, sendRegistrationCodeSchema } from '@/schemas/auth';
+import { type SendRegistrationCode, sendRegistrationCodeSchema } from '@/server/schemas/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import Link from 'next/link';
@@ -61,12 +61,14 @@ export function RegisterForm() {
                                 <FormLabel>By checking this box: </FormLabel>
                                 <FormDescription>
                                     You are agreeing to our{' '}
-                                    <Link href={Routes.terms()} className='text-blue-600 underline'>
+                                    <Link
+                                        href={ROUTE_PATH.terms}
+                                        className='text-blue-600 underline'>
                                         Terms of Service
                                     </Link>{' '}
                                     and{' '}
                                     <Link
-                                        href={Routes.privacy()}
+                                        href={ROUTE_PATH.privacy}
                                         className='text-blue-600 underline'>
                                         Privacy Policy
                                     </Link>

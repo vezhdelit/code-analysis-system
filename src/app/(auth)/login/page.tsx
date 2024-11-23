@@ -7,7 +7,7 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
-import { Routes } from '@/lib/routes';
+import { ROUTE_PATH } from '@/constants/routes.constant';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -30,8 +30,8 @@ export default function LoginPage() {
                 <CardFooter className='flex-col items-start gap-2 text-sm'>
                     <div>
                         <span>Don&apos;t have an account? </span>
-                        <Link className='text-blue-600 underline' href={Routes.register()}>
-                            Get Started
+                        <Link className='text-blue-600 underline' href={ROUTE_PATH.register}>
+                            Create one
                         </Link>
                     </div>
                 </CardFooter>

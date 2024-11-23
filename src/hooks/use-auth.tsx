@@ -1,6 +1,6 @@
-import { Routes } from '@/lib/routes';
-import type { Login, SendRegistrationCode, Verify } from '@/schemas/auth';
-import { client } from '@/server/client';
+import { ROUTE_PATH } from '@/constants/routes.constant';
+import { client } from '@/server/rpc';
+import type { Login, SendRegistrationCode, Verify } from '@/server/schemas/auth';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
@@ -21,13 +21,7 @@ export const useRegister = () => {
             return { email: input.email };
         },
         onSuccess: (_, { email }) => {
-            router.push(
-                Routes.verify(undefined, {
-                    search: {
-                        email,
-                    },
-                })
-            );
+            router.push(ROUTE_PATH.verify + '?' + new URLSearchParams({ email }).toString());
         },
         onError: () => {
             toast.error('Failed to send verification code');
@@ -50,7 +44,7 @@ export const useLogin = () => {
             }
         },
         onSuccess: async () => {
-            router.push(Routes.home());
+            router.push(ROUTE_PATH.home);
         },
         onError: () => {
             toast.error('Login failed.');
@@ -72,7 +66,7 @@ export const useVerify = () => {
             }
         },
         onSuccess: () => {
-            router.push(Routes.home());
+            router.push(ROUTE_PATH.home);
         },
         onError: () => {
             toast.error('Registration failed. Please try again.');

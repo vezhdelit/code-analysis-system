@@ -13,7 +13,7 @@ import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
 import { useLogin } from '@/hooks/use-auth';
 import { cn } from '@/lib/utils';
-import { type Login, loginSchema } from '@/schemas/auth';
+import { type Login, loginSchema } from '@/server/schemas/auth';
 import { ErrorMessage } from '@hookform/error-message';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';

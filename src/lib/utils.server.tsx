@@ -1,11 +1,11 @@
 import 'server-only';
 
+import { ROUTE_PATH } from '@/constants/routes.constant';
 import ConfirmationCode from '@/emails/confirmation-code';
 import { serverEnvs } from '@/env/server';
-import { Routes } from '@/lib/routes';
-import { lucia } from '@/services/auth';
-import { db } from '@/services/db';
-import { emailVerificationCodes } from '@/services/db/schema';
+import { lucia } from '@/server/auth';
+import { db } from '@/server/db';
+import { emailVerificationCodes } from '@/server/db/schema';
 import { hash, verify } from '@node-rs/argon2';
 import { render } from '@react-email/render';
 import { eq } from 'drizzle-orm';
@@ -27,7 +27,7 @@ export const getUser = cache(async () => {
 export async function ensureAuthenticated() {
     const user = await getUser();
     if (!user) {
-        throw redirect(Routes.login());
+        throw redirect(ROUTE_PATH.login);
     }
 
     return user;

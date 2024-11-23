@@ -1,9 +1,9 @@
-import { Routes } from '@/lib/routes';
+import { ROUTE_PATH } from '@/constants/routes.constant';
 import { verifyHash } from '@/lib/utils.server';
-import { loginSchema } from '@/schemas/auth';
+import { lucia } from '@/server/auth';
+import { users } from '@/server/db/schema';
+import { loginSchema } from '@/server/schemas/auth';
 import type { ContextVariables } from '@/server/types';
-import { lucia } from '@/services/auth';
-import { users } from '@/services/db/schema';
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi';
 import { and, eq } from 'drizzle-orm';
 import { setCookie } from 'hono/cookie';
@@ -15,7 +15,8 @@ export const login = new OpenAPIHono<{ Variables: ContextVariables }>().openapi(
         method: 'post',
         path: '/api/auth/login',
         tags: ['Auth'],
-        summary: 'Authorize user',
+        summary: 'Login',
+        description: 'Login user using email and password.',
         request: {
             body: {
                 description: 'Request body',
@@ -63,7 +64,7 @@ export const login = new OpenAPIHono<{ Variables: ContextVariables }>().openapi(
             sameSite: 'Strict',
         });
 
-        revalidatePath(Routes.home());
+        revalidatePath(ROUTE_PATH.home);
 
         return c.body(null);
     }
