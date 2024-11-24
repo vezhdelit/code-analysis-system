@@ -1,7 +1,7 @@
 import type { Session, User } from 'lucia';
 
 import { db } from '@/server/db';
-import type { OpenAPIHono } from '@hono/zod-openapi';
+import type { OpenAPIHono, RouteConfig, RouteHandler } from '@hono/zod-openapi';
 
 export type OpenAPIHonoBindings = {
     Variables: ContextVariables;
@@ -14,3 +14,5 @@ export type ContextVariables = {
     user: User | null;
     session: Session | null;
 };
+
+export type OpenAPIHonoRouteHandler<R extends RouteConfig> = RouteHandler<R, OpenAPIHonoBindings>;

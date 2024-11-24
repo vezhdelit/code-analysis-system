@@ -13,11 +13,6 @@ export default function configureOpenAPI(app: OpenAPIHono<OpenAPIHonoBindings>) 
         },
     });
 
-    app.openAPIRegistry.registerComponent('securitySchemes', 'Bearer', {
-        type: 'http',
-        scheme: 'bearer',
-    });
-
     app.get(
         '/api/docs',
         apiReference({
