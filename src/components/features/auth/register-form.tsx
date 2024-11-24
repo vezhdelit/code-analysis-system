@@ -27,6 +27,7 @@ export function RegisterForm() {
         resolver: zodResolver(sendRegistrationCodeSchema),
         defaultValues: {
             email: '',
+            agree: false,
         },
     });
 
@@ -53,38 +54,38 @@ export function RegisterForm() {
                     control={form.control}
                     name='agree'
                     render={({ field }) => (
-                        <FormItem className='flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4'>
-                            <FormControl>
-                                <Checkbox checked={field.value} onCheckedChange={field.onChange} />
-                            </FormControl>
-                            <div className='space-y-1 leading-none'>
-                                <FormLabel>By checking this box: </FormLabel>
-                                <FormDescription>
-                                    You are agreeing to our{' '}
-                                    <Link
-                                        href={ROUTE_PATH.terms}
-                                        className='text-blue-600 underline'>
-                                        Terms of Service
-                                    </Link>{' '}
-                                    and{' '}
-                                    <Link
-                                        href={ROUTE_PATH.privacy}
-                                        className='text-blue-600 underline'>
-                                        Privacy Policy
-                                    </Link>
-                                    .
-                                </FormDescription>
-                                <FormMessage />
+                        <FormItem className='rounded-md border p-4'>
+                            <div className='flex flex-row items-center space-x-3'>
+                                <FormControl>
+                                    <Checkbox
+                                        checked={field.value}
+                                        onCheckedChange={field.onChange}
+                                    />
+                                </FormControl>
+                                <div className='space-y-1 leading-none'>
+                                    <FormDescription>
+                                        I agree to the{' '}
+                                        <Link
+                                            href={ROUTE_PATH.terms}
+                                            className='text-link underline'>
+                                            Terms of Service
+                                        </Link>{' '}
+                                        and{' '}
+                                        <Link
+                                            href={ROUTE_PATH.privacy}
+                                            className='text-link underline'>
+                                            Privacy Policy
+                                        </Link>
+                                    </FormDescription>
+                                </div>
                             </div>
+                            <FormMessage />
                         </FormItem>
                     )}
                 />
-                <Button type='submit' disabled={isPending}>
+                <Button className='w-full' type='submit' disabled={isPending}>
                     <Loader2
-                        className={cn('mr-2 size-4 animate-spin', {
-                            [`inline`]: isPending,
-                            [`hidden`]: !isPending,
-                        })}
+                        className={cn('size-4 animate-spin', isPending ? 'inline' : 'hidden')}
                     />
                     Continue
                 </Button>

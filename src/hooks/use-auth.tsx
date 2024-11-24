@@ -21,6 +21,7 @@ export const useRegister = () => {
             return { email: input.email };
         },
         onSuccess: (_, { email }) => {
+            toast.success('Verification code sent to your email.');
             router.push(ROUTE_PATH.verify + '?' + new URLSearchParams({ email }).toString());
         },
         onError: () => {
@@ -44,7 +45,8 @@ export const useLogin = () => {
             }
         },
         onSuccess: async () => {
-            router.push(ROUTE_PATH.home);
+            toast.success('Login successful.');
+            router.push(ROUTE_PATH.dashboard);
         },
         onError: () => {
             toast.error('Login failed.');
@@ -66,7 +68,8 @@ export const useVerify = () => {
             }
         },
         onSuccess: () => {
-            router.push(ROUTE_PATH.home);
+            toast.success('Registration successful. You are logged in.');
+            router.push(ROUTE_PATH.dashboard);
         },
         onError: () => {
             toast.error('Registration failed. Please try again.');

@@ -85,12 +85,9 @@ export function LoginForm() {
                         </FormItem>
                     )}
                 />
-                <Button type='submit' disabled={isPending}>
+                <Button className='w-full' type='submit' disabled={isPending}>
                     <Loader2
-                        className={cn('mr-2 size-4 animate-spin', {
-                            [`inline`]: isPending,
-                            [`hidden`]: !isPending,
-                        })}
+                        className={cn('size-4 animate-spin', isPending ? 'inline' : 'hidden')}
                     />
                     Login
                 </Button>

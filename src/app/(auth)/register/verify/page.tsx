@@ -22,7 +22,7 @@ export default async function VerifyPage(props: {
 
     return (
         <div className='flex h-full items-center'>
-            <Card className='mx-auto w-[32rem] max-w-lg'>
+            <Card className='mx-auto w-[28rem] max-w-lg'>
                 <CardHeader>
                     <CardTitle>Verify Your Email</CardTitle>
                     <CardDescription>Almost there!</CardDescription>

@@ -47,7 +47,7 @@ export function InputOTPSlot({
         <div
             ref={ref}
             className={cn(
-                'relative flex size-10 items-center justify-center border-y border-r border-input text-sm transition-all first:rounded-l-md first:border-l last:rounded-r-md',
+                'relative flex size-10 items-center justify-center border-y border-r border-transparent bg-background text-sm transition-all first:rounded-l-md first:border-l last:rounded-r-md',
                 isActive && 'z-10 ring-2 ring-ring ring-offset-background',
                 className
             )}

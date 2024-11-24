@@ -4,6 +4,7 @@ import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import type { ReactNode } from 'react';
 
+import { cn } from '@/lib/utils';
 import '@/styles/globals.css';
 
 const inter = Inter({
@@ -37,8 +38,13 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     return (
         <html lang='en' dir='ltr' suppressHydrationWarning>
             <body
-                className={`${inter.variable} ${serverEnvs.NODE_ENV === 'development' ? 'debug-screens' : ''}`}>
-                <Providers>{children}</Providers>
+                className={cn(
+                    inter.variable,
+                    serverEnvs.NODE_ENV === 'development' ? 'debug-screens' : ''
+                )}>
+                <Providers>
+                    <div className='flex h-screen flex-col'>{children}</div>
+                </Providers>
             </body>
         </html>
     );

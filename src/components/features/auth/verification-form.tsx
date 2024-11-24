@@ -10,13 +10,7 @@ import {
     FormLabel,
     FormMessage,
 } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import {
-    InputOTP,
-    InputOTPGroup,
-    InputOTPSeparator,
-    InputOTPSlot,
-} from '@/components/ui/input-otp';
+import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
 import { PasswordInput } from '@/components/ui/password-input';
 import { useVerify } from '@/hooks/use-auth';
 import { cn } from '@/lib/utils';
@@ -44,55 +38,6 @@ export function VerificationForm({ email }: { email: string }) {
             <form onSubmit={form.handleSubmit(values => mutate(values))} className='space-y-4'>
                 <FormField
                     control={form.control}
-                    name='confirmationCode'
-                    render={({ field }) => (
-                        <FormItem>
-                            <div className='space-y-2 leading-none'>
-                                <div className='space-y-1'>
-                                    <FormLabel>Confirmation Code</FormLabel>
-                                    <FormDescription>Check your email.</FormDescription>
-                                </div>
-                                <FormControl>
-                                    <InputOTP maxLength={8} {...field}>
-                                        <InputOTPGroup>
-                                            <InputOTPSlot index={0} />
-                                            <InputOTPSlot index={1} />
-                                            <InputOTPSlot index={2} />
-                                            <InputOTPSlot index={3} />
-                                        </InputOTPGroup>
-                                        <InputOTPSeparator />
-                                        <InputOTPGroup>
-                                            <InputOTPSlot index={4} />
-                                            <InputOTPSlot index={5} />
-                                            <InputOTPSlot index={6} />
-                                            <InputOTPSlot index={7} />
-                                        </InputOTPGroup>
-                                    </InputOTP>
-                                </FormControl>
-                                <FormMessage />
-                            </div>
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name='email'
-                    render={({ field }) => (
-                        <FormItem>
-                            <div className='space-y-2 leading-none'>
-                                <div className='space-y-1'>
-                                    <FormLabel>Email</FormLabel>
-                                </div>
-                                <FormControl>
-                                    <Input readOnly {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </div>
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
                     name='password'
                     render={({ field }) => (
                         <FormItem>
@@ -102,7 +47,7 @@ export function VerificationForm({ email }: { email: string }) {
                                     <FormDescription>Choose a strong password.</FormDescription>
                                 </div>
                                 <FormControl>
-                                    <PasswordInput {...field} />
+                                    <PasswordInput placeholder='Enter password' {...field} />
                                 </FormControl>
                                 <ErrorMessage
                                     errors={form.formState.errors}
@@ -122,12 +67,39 @@ export function VerificationForm({ email }: { email: string }) {
                         </FormItem>
                     )}
                 />
-                <Button type='submit' disabled={isPending}>
+                <FormField
+                    control={form.control}
+                    name='confirmationCode'
+                    render={({ field }) => (
+                        <FormItem>
+                            <div className='space-y-2 leading-none'>
+                                <div className='space-y-1'>
+                                    <FormLabel>Confirmation Code</FormLabel>
+                                    <FormDescription>Check your email.</FormDescription>
+                                </div>
+                                <div className='flex items-center justify-center'>
+                                    <FormControl>
+                                        <InputOTP maxLength={6} {...field}>
+                                            {Array.from({ length: 6 }, (_, i) => (
+                                                <InputOTPGroup key={i}>
+                                                    <InputOTPSlot
+                                                        className='size-12 text-base'
+                                                        index={i}
+                                                    />
+                                                </InputOTPGroup>
+                                            ))}
+                                        </InputOTP>
+                                    </FormControl>
+                                </div>
+
+                                <FormMessage />
+                            </div>
+                        </FormItem>
+                    )}
+                />
+                <Button className='w-full' type='submit' disabled={isPending}>
                     <Loader2
-                        className={cn('mr-2 size-4 animate-spin', {
-                            [`inline`]: isPending,
-                            [`hidden`]: !isPending,
-                        })}
+                        className={cn('size-4 animate-spin', isPending ? 'inline' : 'hidden')}
                     />
                     Continue
                 </Button>

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const sendRegistrationCodeSchema = z.object({
-    agree: z.boolean(),
+    agree: z.boolean().refine(value => value, { message: 'You must agree to the terms.' }),
     email: z.string().email(),
 });
 

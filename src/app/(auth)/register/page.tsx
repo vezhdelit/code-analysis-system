@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 export default function RegisterPage() {
     return (
         <div className='flex h-full items-center'>
-            <Card className='mx-auto w-[32rem] max-w-lg'>
+            <Card className='mx-auto w-[28rem] max-w-lg'>
                 <CardHeader>
                     <CardTitle>Register</CardTitle>
                     <CardDescription>Welcome!</CardDescription>
@@ -27,10 +27,10 @@ export default function RegisterPage() {
                 <CardContent>
                     <RegisterForm />
                 </CardContent>
-                <CardFooter className='flex-col items-start gap-2 text-sm'>
+                <CardFooter className='flex-col items-center gap-2 text-sm'>
                     <div>
                         <span>Already have an account? </span>
-                        <Link className='text-blue-600 underline' href={ROUTE_PATH.login}>
+                        <Link className='text-link underline' href={ROUTE_PATH.login}>
                             Login
                         </Link>
                     </div>
