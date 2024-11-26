@@ -2,6 +2,7 @@ import createHonoApp from '@/server/app';
 import { luciaAuth } from '@/server/middlewares/lucia-auth';
 import configureOpenAPI from '@/server/open-api';
 import authRouter from '@/server/routes/auth/auth.index';
+import linterRouter from '@/server/routes/linter/linter.index';
 import secretRouter from '@/server/routes/secret/secret.index';
 
 const app = createHonoApp();
@@ -12,6 +13,7 @@ configureOpenAPI(app);
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const routes = app
     .route('/', authRouter)
+    .route('/', linterRouter)
     .use(async (c, next) => {
         const user = c.get('user');
         if (!user) {
