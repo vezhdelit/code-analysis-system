@@ -10,4 +10,6 @@ export const ROUTE_PATH = {
     register: '/register',
     verify: '/register/verify',
     secret: '/secret',
+
+    docs: '/api/docs',
 } as const;

@@ -1,5 +1,6 @@
 import { AuthenticatedUser } from '@/components/features/auth/authenticated-user';
 import { ThemeToggle } from '@/components/features/theme/theme-toggle';
+import { Button } from '@/components/ui/button';
 import { ROUTE_PATH } from '@/constants/routes.constant';
 import Link from 'next/link';
 
@@ -10,7 +11,19 @@ export const Header = async () => {
                 Hono x Lucia
             </Link>
 
-            <ThemeToggle />
+            <Link href={ROUTE_PATH.docs} className='font-semibold'>
+                API
+            </Link>
+
+            <div className='flex items-center gap-5'>
+                <Button variant={'link'} asChild>
+                    <Link href={ROUTE_PATH.docs} className='font-semibold'>
+                        API
+                    </Link>
+                </Button>
+
+                <ThemeToggle />
+            </div>
         </nav>
     );
 };
@@ -21,7 +34,15 @@ export const AuthHeader = async () => {
                 Hono x Lucia
             </Link>
 
-            <AuthenticatedUser />
+            <div className='flex items-center gap-5'>
+                <Button variant={'link'} asChild>
+                    <Link href={ROUTE_PATH.docs} className='font-semibold'>
+                        API
+                    </Link>
+                </Button>
+
+                <AuthenticatedUser />
+            </div>
         </nav>
     );
 };

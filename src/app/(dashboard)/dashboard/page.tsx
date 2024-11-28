@@ -1,5 +1,5 @@
 'use client';
-import ProgramAnalysis from '@/components/features/linter/code-analysis-breakdown';
+import ProgramAnalysis from '@/components/features/linter/code-breakdown';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { SimpleCodeEditor } from '@/components/ui/simple-code-editor';
