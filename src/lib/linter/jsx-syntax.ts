@@ -11,5 +11,5 @@ export const JSXSyntax = {
     JSXOpeningElement: 'JSXOpeningElement',
     JSXOpeningFragment: 'JSXOpeningFragment',
     JSXSpreadAttribute: 'JSXSpreadAttribute',
-    JSXText: 'JSXText'
+    JSXText: 'JSXText',
 };

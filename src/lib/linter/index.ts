@@ -1,3 +1,4 @@
+// @ts-nocheck
 /*
   Copyright JS Foundation and other contributors, https://js.foundation/
 

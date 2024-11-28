@@ -1,8 +1,9 @@
+// @ts-nocheck
 import { assert } from './assert';
 import { ErrorHandler } from './error-handler';
 import { Messages } from './messages';
 import * as Node from './nodes';
-import { Comment, RawToken, Scanner, SourceLocation } from './scanner';
+import { Comment, RawToken, Scanner, type SourceLocation } from './scanner';
 import { Syntax } from './syntax';
 import { Token, TokenName } from './token';
 

@@ -1,30 +1,100 @@
+// @ts-nocheck
 import { Syntax } from './syntax';
 
 export type ArgumentListElement = Expression | SpreadElement;
 export type ArrayExpressionElement = Expression | SpreadElement | null;
-export type ArrayPatternElement = AssignmentPattern | BindingIdentifier | BindingPattern | RestElement | null;
+export type ArrayPatternElement =
+    | AssignmentPattern
+    | BindingIdentifier
+    | BindingPattern
+    | RestElement
+    | null;
 export type BindingPattern = ArrayPattern | ObjectPattern;
 export type BindingIdentifier = Identifier;
 export type ChainElement = CallExpression | ComputedMemberExpression | StaticMemberExpression;
-export type Declaration = AsyncFunctionDeclaration | ClassDeclaration | ExportDeclaration | FunctionDeclaration | ImportDeclaration | VariableDeclaration;
-export type ExportableDefaultDeclaration = BindingIdentifier | BindingPattern | ClassDeclaration | Expression | FunctionDeclaration;
-export type ExportableNamedDeclaration = AsyncFunctionDeclaration | ClassDeclaration | FunctionDeclaration | VariableDeclaration;
-export type ExportDeclaration = ExportAllDeclaration | ExportDefaultDeclaration | ExportNamedDeclaration;
-export type Expression = ArrayExpression | ArrowFunctionExpression | AssignmentExpression | AsyncArrowFunctionExpression | AsyncFunctionExpression |
-    AwaitExpression | BinaryExpression | CallExpression | ChainExpression | ClassExpression | ComputedMemberExpression |
-    ConditionalExpression | Identifier | FunctionExpression | Literal | NewExpression | ObjectExpression |
-    RegexLiteral | SequenceExpression | StaticMemberExpression | TaggedTemplateExpression |
-    ThisExpression | UnaryExpression | UpdateExpression | YieldExpression;
+export type Declaration =
+    | AsyncFunctionDeclaration
+    | ClassDeclaration
+    | ExportDeclaration
+    | FunctionDeclaration
+    | ImportDeclaration
+    | VariableDeclaration;
+export type ExportableDefaultDeclaration =
+    | BindingIdentifier
+    | BindingPattern
+    | ClassDeclaration
+    | Expression
+    | FunctionDeclaration;
+export type ExportableNamedDeclaration =
+    | AsyncFunctionDeclaration
+    | ClassDeclaration
+    | FunctionDeclaration
+    | VariableDeclaration;
+export type ExportDeclaration =
+    | ExportAllDeclaration
+    | ExportDefaultDeclaration
+    | ExportNamedDeclaration;
+export type Expression =
+    | ArrayExpression
+    | ArrowFunctionExpression
+    | AssignmentExpression
+    | AsyncArrowFunctionExpression
+    | AsyncFunctionExpression
+    | AwaitExpression
+    | BinaryExpression
+    | CallExpression
+    | ChainExpression
+    | ClassExpression
+    | ComputedMemberExpression
+    | ConditionalExpression
+    | Identifier
+    | FunctionExpression
+    | Literal
+    | NewExpression
+    | ObjectExpression
+    | RegexLiteral
+    | SequenceExpression
+    | StaticMemberExpression
+    | TaggedTemplateExpression
+    | ThisExpression
+    | UnaryExpression
+    | UpdateExpression
+    | YieldExpression;
 export type FunctionParameter = AssignmentPattern | BindingIdentifier | BindingPattern;
-export type ImportDeclarationSpecifier = ImportDefaultSpecifier | ImportNamespaceSpecifier | ImportSpecifier;
+export type ImportDeclarationSpecifier =
+    | ImportDefaultSpecifier
+    | ImportNamespaceSpecifier
+    | ImportSpecifier;
 export type ObjectExpressionProperty = Property | SpreadElement;
 export type ObjectPatternProperty = Property | RestElement;
-export type Statement = AsyncFunctionDeclaration | BreakStatement | ContinueStatement | DebuggerStatement | DoWhileStatement |
-    EmptyStatement | ExpressionStatement | Directive | ForStatement | ForInStatement | ForOfStatement |
-    FunctionDeclaration | IfStatement | ReturnStatement | SwitchStatement | ThrowStatement |
-    TryStatement | VariableDeclaration | WhileStatement | WithStatement;
+export type Statement =
+    | AsyncFunctionDeclaration
+    | BreakStatement
+    | ContinueStatement
+    | DebuggerStatement
+    | DoWhileStatement
+    | EmptyStatement
+    | ExpressionStatement
+    | Directive
+    | ForStatement
+    | ForInStatement
+    | ForOfStatement
+    | FunctionDeclaration
+    | IfStatement
+    | ReturnStatement
+    | SwitchStatement
+    | ThrowStatement
+    | TryStatement
+    | VariableDeclaration
+    | WhileStatement
+    | WithStatement;
 export type PropertyKey = Identifier | Literal;
-export type PropertyValue = AssignmentPattern | AsyncFunctionExpression | BindingIdentifier | BindingPattern | FunctionExpression;
+export type PropertyValue =
+    | AssignmentPattern
+    | AsyncFunctionExpression
+    | BindingIdentifier
+    | BindingPattern
+    | FunctionExpression;
 export type StatementListItem = Declaration | Statement;
 
 export class ArrayExpression {
@@ -53,7 +123,11 @@ export class ArrowFunctionExpression {
     readonly generator: boolean;
     readonly expression: boolean;
     readonly async: boolean;
-    constructor(params: FunctionParameter[], body: BlockStatement | Expression, expression: boolean) {
+    constructor(
+        params: FunctionParameter[],
+        body: BlockStatement | Expression,
+        expression: boolean
+    ) {
         this.type = Syntax.ArrowFunctionExpression;
         this.id = null;
         this.params = params;
@@ -96,7 +170,11 @@ export class AsyncArrowFunctionExpression {
     readonly generator: boolean;
     readonly expression: boolean;
     readonly async: boolean;
-    constructor(params: FunctionParameter[], body: BlockStatement | Expression, expression: boolean) {
+    constructor(
+        params: FunctionParameter[],
+        body: BlockStatement | Expression,
+        expression: boolean
+    ) {
         this.type = Syntax.ArrowFunctionExpression;
         this.id = null;
         this.params = params;
@@ -115,7 +193,12 @@ export class AsyncFunctionDeclaration {
     readonly generator: boolean;
     readonly expression: boolean;
     readonly async: boolean;
-    constructor(id: Identifier | null, params: FunctionParameter[], body: BlockStatement, generator: boolean) {
+    constructor(
+        id: Identifier | null,
+        params: FunctionParameter[],
+        body: BlockStatement,
+        generator: boolean
+    ) {
         this.type = Syntax.FunctionDeclaration;
         this.id = id;
         this.params = params;
@@ -134,7 +217,12 @@ export class AsyncFunctionExpression {
     readonly generator: boolean;
     readonly expression: boolean;
     readonly async: boolean;
-    constructor(id: Identifier | null, params: FunctionParameter[], body: BlockStatement, generator: boolean) {
+    constructor(
+        id: Identifier | null,
+        params: FunctionParameter[],
+        body: BlockStatement,
+        generator: boolean
+    ) {
         this.type = Syntax.FunctionExpression;
         this.id = id;
         this.params = params;
@@ -160,7 +248,7 @@ export class BinaryExpression {
     readonly left: Expression;
     readonly right: Expression;
     constructor(operator: string, left: Expression, right: Expression) {
-        const logical = (operator === '||' || operator === '&&' || operator === '??');
+        const logical = operator === '||' || operator === '&&' || operator === '??';
         this.type = logical ? Syntax.LogicalExpression : Syntax.BinaryExpression;
         this.operator = operator;
         this.left = left;
@@ -350,7 +438,11 @@ export class ExportNamedDeclaration {
     readonly declaration: ExportableNamedDeclaration | null;
     readonly specifiers: ExportSpecifier[];
     readonly source: Literal | null;
-    constructor(declaration: ExportableNamedDeclaration | null, specifiers: ExportSpecifier[], source: Literal | null) {
+    constructor(
+        declaration: ExportableNamedDeclaration | null,
+        specifiers: ExportSpecifier[],
+        source: Literal | null
+    ) {
         this.type = Syntax.ExportNamedDeclaration;
         this.declaration = declaration;
         this.specifiers = specifiers;
@@ -414,7 +506,12 @@ export class ForStatement {
     readonly test: Expression | null;
     readonly update: Expression | null;
     body: Statement;
-    constructor(init: Expression | null, test: Expression | null, update: Expression | null, body: Statement) {
+    constructor(
+        init: Expression | null,
+        test: Expression | null,
+        update: Expression | null,
+        body: Statement
+    ) {
         this.type = Syntax.ForStatement;
         this.init = init;
         this.test = test;
@@ -431,7 +528,12 @@ export class FunctionDeclaration {
     readonly generator: boolean;
     readonly expression: boolean;
     readonly async: boolean;
-    constructor(id: Identifier | null, params: FunctionParameter[], body: BlockStatement, generator: boolean) {
+    constructor(
+        id: Identifier | null,
+        params: FunctionParameter[],
+        body: BlockStatement,
+        generator: boolean
+    ) {
         this.type = Syntax.FunctionDeclaration;
         this.id = id;
         this.params = params;
@@ -450,7 +552,12 @@ export class FunctionExpression {
     readonly generator: boolean;
     readonly expression: boolean;
     readonly async: boolean;
-    constructor(id: Identifier | null, params: FunctionParameter[], body: BlockStatement, generator: boolean) {
+    constructor(
+        id: Identifier | null,
+        params: FunctionParameter[],
+        body: BlockStatement,
+        generator: boolean
+    ) {
         this.type = Syntax.FunctionExpression;
         this.id = id;
         this.params = params;
@@ -570,7 +677,13 @@ export class MethodDefinition {
     readonly value: AsyncFunctionExpression | FunctionExpression | null;
     readonly kind: string;
     readonly static: boolean;
-    constructor(key: Expression | null, computed: boolean, value: AsyncFunctionExpression | FunctionExpression | null, kind: string, isStatic: boolean) {
+    constructor(
+        key: Expression | null,
+        computed: boolean,
+        value: AsyncFunctionExpression | FunctionExpression | null,
+        kind: string,
+        isStatic: boolean
+    ) {
         this.type = Syntax.MethodDefinition;
         this.key = key;
         this.computed = computed;
@@ -628,7 +741,14 @@ export class Property {
     readonly kind: string;
     readonly method: boolean;
     readonly shorthand: boolean;
-    constructor(kind: string, key: PropertyKey, computed: boolean, value: PropertyValue | null, method: boolean, shorthand: boolean) {
+    constructor(
+        kind: string,
+        key: PropertyKey,
+        computed: boolean,
+        value: PropertyValue | null,
+        method: boolean,
+        shorthand: boolean
+    ) {
         this.type = Syntax.Property;
         this.key = key;
         this.computed = computed;
@@ -802,7 +922,11 @@ export class TryStatement {
     readonly block: BlockStatement;
     readonly handler: CatchClause | null;
     readonly finalizer: BlockStatement | null;
-    constructor(block: BlockStatement, handler: CatchClause | null, finalizer: BlockStatement | null) {
+    constructor(
+        block: BlockStatement,
+        handler: CatchClause | null,
+        finalizer: BlockStatement | null
+    ) {
         this.type = Syntax.TryStatement;
         this.block = block;
         this.handler = handler;

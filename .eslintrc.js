@@ -50,6 +50,8 @@ module.exports = {
         '.next',
         'coverage',
         'dist',
+
+        'src/lib/linter/**/*',
     ],
     parserOptions: {
         tsconfigRootDir: __dirname,

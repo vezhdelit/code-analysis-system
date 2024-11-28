@@ -1,3 +1,4 @@
+// @ts-nocheck
 export const enum Token {
     BooleanLiteral = 1,
     EOF,
@@ -8,7 +9,7 @@ export const enum Token {
     Punctuator,
     StringLiteral,
     RegularExpression,
-    Template
+    Template,
 }
 
 export const TokenName = {};

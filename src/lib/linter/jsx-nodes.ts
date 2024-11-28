@@ -1,8 +1,13 @@
+// @ts-nocheck
 import { JSXSyntax } from './jsx-syntax';
 import * as Node from './nodes';
 
 export type JSXAttributeName = JSXIdentifier | JSXNamespacedName;
-export type JSXAttributeValue = Node.Literal | JSXElement | JSXSpreadAttribute | JSXExpressionContainer;
+export type JSXAttributeValue =
+    | Node.Literal
+    | JSXElement
+    | JSXSpreadAttribute
+    | JSXExpressionContainer;
 export type JSXChild = JSXElement | JSXExpressionContainer | JSXText;
 export type JSXElementAttribute = JSXAttribute | JSXSpreadAttribute;
 export type JSXElementName = JSXIdentifier | JSXNamespacedName | JSXMemberExpression;

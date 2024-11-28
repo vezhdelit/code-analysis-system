@@ -1,4 +1,5 @@
-import { SourceLocation } from './scanner';
+// @ts-nocheck
+import { type SourceLocation } from './scanner';
 import { Syntax } from './syntax';
 
 interface Comment {
@@ -33,14 +34,14 @@ export class CommentHandler {
         this.leading = [];
         this.trailing = [];
     }
-
-    insertInnerComments(node, metadata) {
+    //eslint-disable-next-line @typescript-eslint/no-explicit-any
+    insertInnerComments(node: any, metadata: any) {
         //  innnerComments for properties empty block
         //  `function a() {/** comments **\/}`
         if (node.type === Syntax.BlockStatement && node.body.length === 0) {
             const innerComments: Comment[] = [];
             for (let i = this.leading.length - 1; i >= 0; --i) {
-                const entry = this.leading[i];
+                const entry = this.leading[i]!;
                 if (metadata.end.offset >= entry.start) {
                     innerComments.unshift(entry.comment);
                     this.leading.splice(i, 1);
@@ -52,8 +53,8 @@ export class CommentHandler {
             }
         }
     }
-
-    findTrailingComments(metadata) {
+    //eslint-disable-next-line @typescript-eslint/no-explicit-any
+    findTrailingComments(metadata: any) {
         let trailingComments: Comment[] = [];
 
         if (this.trailing.length > 0) {

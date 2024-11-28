@@ -1,3 +1,4 @@
+// @ts-nocheck
 declare class Error {
     public name: string;
     public message: string;
@@ -65,5 +66,4 @@ export class ErrorHandler {
             throw error;
         }
     }
-
 }

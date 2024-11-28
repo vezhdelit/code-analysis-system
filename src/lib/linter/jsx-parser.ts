@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Character } from './character';
 import * as JSXNode from './jsx-nodes';
 import { JSXSyntax } from './jsx-syntax';

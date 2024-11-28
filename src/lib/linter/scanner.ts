@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { assert } from './assert';
 import { Character } from './character';
 import { ErrorHandler } from './error-handler';
@@ -58,7 +59,6 @@ interface ScannerState {
 }
 
 export class Scanner {
-
     readonly source: string;
     readonly errorHandler: ErrorHandler;
     trackComment: boolean;
@@ -79,7 +79,7 @@ export class Scanner {
 
         this.length = code.length;
         this.index = 0;
-        this.lineNumber = (code.length > 0) ? 1 : 0;
+        this.lineNumber = code.length > 0 ? 1 : 0;
         this.lineStart = 0;
         this.curlyStack = [];
     }
@@ -89,7 +89,7 @@ export class Scanner {
             index: this.index,
             lineNumber: this.lineNumber,
             lineStart: this.lineStart,
-            curlyStack: this.curlyStack.slice()
+            curlyStack: this.curlyStack.slice(),
         };
     }
 
@@ -105,13 +105,21 @@ export class Scanner {
     }
 
     public throwUnexpectedToken(message = Messages.UnexpectedTokenIllegal): never {
-        return this.errorHandler.throwError(this.index, this.lineNumber,
-            this.index - this.lineStart + 1, message);
+        return this.errorHandler.throwError(
+            this.index,
+            this.lineNumber,
+            this.index - this.lineStart + 1,
+            message
+        );
     }
 
     private tolerateUnexpectedToken(message = Messages.UnexpectedTokenIllegal) {
-        this.errorHandler.tolerateError(this.index, this.lineNumber,
-            this.index - this.lineStart + 1, message);
+        this.errorHandler.tolerateError(
+            this.index,
+            this.lineNumber,
+            this.index - this.lineStart + 1,
+            message
+        );
     }
 
     // https://tc39.github.io/ecma262/#sec-comments
@@ -126,9 +134,9 @@ export class Scanner {
             loc = {
                 start: {
                     line: this.lineNumber,
-                    column: this.index - this.lineStart - offset
+                    column: this.index - this.lineStart - offset,
                 },
-                end: {}
+                end: {},
             };
         }
 
@@ -139,13 +147,13 @@ export class Scanner {
                 if (this.trackComment) {
                     loc.end = {
                         line: this.lineNumber,
-                        column: this.index - this.lineStart - 1
+                        column: this.index - this.lineStart - 1,
                     };
                     const entry: Comment = {
                         multiLine: false,
                         slice: [start + offset, this.index - 1],
                         range: [start, this.index - 1],
-                        loc: loc
+                        loc: loc,
                     };
                     comments.push(entry);
                 }
@@ -161,13 +169,13 @@ export class Scanner {
         if (this.trackComment) {
             loc.end = {
                 line: this.lineNumber,
-                column: this.index - this.lineStart
+                column: this.index - this.lineStart,
             };
             const entry: Comment = {
                 multiLine: false,
                 slice: [start + offset, this.index],
                 range: [start, this.index],
-                loc: loc
+                loc: loc,
             };
             comments.push(entry);
         }
@@ -185,35 +193,35 @@ export class Scanner {
             loc = {
                 start: {
                     line: this.lineNumber,
-                    column: this.index - this.lineStart - 2
+                    column: this.index - this.lineStart - 2,
                 },
-                end: {}
+                end: {},
             };
         }
 
         while (!this.eof()) {
             const ch = this.source.charCodeAt(this.index);
             if (Character.isLineTerminator(ch)) {
-                if (ch === 0x0D && this.source.charCodeAt(this.index + 1) === 0x0A) {
+                if (ch === 0x0d && this.source.charCodeAt(this.index + 1) === 0x0a) {
                     ++this.index;
                 }
                 ++this.lineNumber;
                 ++this.index;
                 this.lineStart = this.index;
-            } else if (ch === 0x2A) {
+            } else if (ch === 0x2a) {
                 // Block comment ends with '*/'.
-                if (this.source.charCodeAt(this.index + 1) === 0x2F) {
+                if (this.source.charCodeAt(this.index + 1) === 0x2f) {
                     this.index += 2;
                     if (this.trackComment) {
                         loc.end = {
                             line: this.lineNumber,
-                            column: this.index - this.lineStart
+                            column: this.index - this.lineStart,
                         };
                         const entry: Comment = {
                             multiLine: true,
                             slice: [start + 2, this.index - 2],
                             range: [start, this.index],
-                            loc: loc
+                            loc: loc,
                         };
                         comments.push(entry);
                     }
@@ -229,13 +237,13 @@ export class Scanner {
         if (this.trackComment) {
             loc.end = {
                 line: this.lineNumber,
-                column: this.index - this.lineStart
+                column: this.index - this.lineStart,
             };
             const entry: Comment = {
                 multiLine: true,
                 slice: [start + 2, this.index],
                 range: [start, this.index],
-                loc: loc
+                loc: loc,
             };
             comments.push(entry);
         }
@@ -250,7 +258,7 @@ export class Scanner {
             comments = [];
         }
 
-        let start = (this.index === 0);
+        let start = this.index === 0;
         while (!this.eof()) {
             let ch = this.source.charCodeAt(this.index);
 
@@ -258,22 +266,24 @@ export class Scanner {
                 ++this.index;
             } else if (Character.isLineTerminator(ch)) {
                 ++this.index;
-                if (ch === 0x0D && this.source.charCodeAt(this.index) === 0x0A) {
+                if (ch === 0x0d && this.source.charCodeAt(this.index) === 0x0a) {
                     ++this.index;
                 }
                 ++this.lineNumber;
                 this.lineStart = this.index;
                 start = true;
-            } else if (ch === 0x2F) { // U+002F is '/'
+            } else if (ch === 0x2f) {
+                // U+002F is '/'
                 ch = this.source.charCodeAt(this.index + 1);
-                if (ch === 0x2F) {
+                if (ch === 0x2f) {
                     this.index += 2;
                     const comment = this.skipSingleLineComment(2);
                     if (this.trackComment) {
                         comments = comments.concat(comment);
                     }
                     start = true;
-                } else if (ch === 0x2A) {  // U+002A is '*'
+                } else if (ch === 0x2a) {
+                    // U+002A is '*'
                     this.index += 2;
                     const comment = this.skipMultiLineComment();
                     if (this.trackComment) {
@@ -282,9 +292,13 @@ export class Scanner {
                 } else {
                     break;
                 }
-            } else if (start && ch === 0x2D) { // U+002D is '-'
+            } else if (start && ch === 0x2d) {
+                // U+002D is '-'
                 // U+003E is '>'
-                if ((this.source.charCodeAt(this.index + 1) === 0x2D) && (this.source.charCodeAt(this.index + 2) === 0x3E)) {
+                if (
+                    this.source.charCodeAt(this.index + 1) === 0x2d &&
+                    this.source.charCodeAt(this.index + 2) === 0x3e
+                ) {
                     // '-->' is a single-line comment
                     this.index += 3;
                     const comment = this.skipSingleLineComment(3);
@@ -294,7 +308,8 @@ export class Scanner {
                 } else {
                     break;
                 }
-            } else if (ch === 0x3C && !this.isModule) { // U+003C is '<'
+            } else if (ch === 0x3c && !this.isModule) {
+                // U+003C is '<'
                 if (this.source.slice(this.index + 1, this.index + 4) === '!--') {
                     this.index += 4; // `<!--`
                     const comment = this.skipSingleLineComment(4);
@@ -352,26 +367,44 @@ export class Scanner {
     private isKeyword(id: string): boolean {
         switch (id.length) {
             case 2:
-                return (id === 'if') || (id === 'in') || (id === 'do');
+                return id === 'if' || id === 'in' || id === 'do';
             case 3:
-                return (id === 'var') || (id === 'for') || (id === 'new') ||
-                    (id === 'try') || (id === 'let');
+                return id === 'var' || id === 'for' || id === 'new' || id === 'try' || id === 'let';
             case 4:
-                return (id === 'this') || (id === 'else') || (id === 'case') ||
-                    (id === 'void') || (id === 'with') || (id === 'enum');
+                return (
+                    id === 'this' ||
+                    id === 'else' ||
+                    id === 'case' ||
+                    id === 'void' ||
+                    id === 'with' ||
+                    id === 'enum'
+                );
             case 5:
-                return (id === 'while') || (id === 'break') || (id === 'catch') ||
-                    (id === 'throw') || (id === 'const') || (id === 'yield') ||
-                    (id === 'class') || (id === 'super');
+                return (
+                    id === 'while' ||
+                    id === 'break' ||
+                    id === 'catch' ||
+                    id === 'throw' ||
+                    id === 'const' ||
+                    id === 'yield' ||
+                    id === 'class' ||
+                    id === 'super'
+                );
             case 6:
-                return (id === 'return') || (id === 'typeof') || (id === 'delete') ||
-                    (id === 'switch') || (id === 'export') || (id === 'import');
+                return (
+                    id === 'return' ||
+                    id === 'typeof' ||
+                    id === 'delete' ||
+                    id === 'switch' ||
+                    id === 'export' ||
+                    id === 'import'
+                );
             case 7:
-                return (id === 'default') || (id === 'finally') || (id === 'extends');
+                return id === 'default' || id === 'finally' || id === 'extends';
             case 8:
-                return (id === 'function') || (id === 'continue') || (id === 'debugger');
+                return id === 'function' || id === 'continue' || id === 'debugger';
             case 10:
-                return (id === 'instanceof');
+                return id === 'instanceof';
             default:
                 return false;
         }
@@ -380,11 +413,11 @@ export class Scanner {
     private codePointAt(i: number): number {
         let cp = this.source.charCodeAt(i);
 
-        if (cp >= 0xD800 && cp <= 0xDBFF) {
+        if (cp >= 0xd800 && cp <= 0xdbff) {
             const second = this.source.charCodeAt(i + 1);
-            if (second >= 0xDC00 && second <= 0xDFFF) {
+            if (second >= 0xdc00 && second <= 0xdfff) {
                 const first = cp;
-                cp = (first - 0xD800) * 0x400 + second - 0xDC00 + 0x10000;
+                cp = (first - 0xd800) * 0x400 + second - 0xdc00 + 0x10000;
             }
         }
 
@@ -392,7 +425,7 @@ export class Scanner {
     }
 
     private scanHexEscape(prefix: string): string | null {
-        const len = (prefix === 'u') ? 4 : 2;
+        const len = prefix === 'u' ? 4 : 2;
         let code = 0;
 
         for (let i = 0; i < len; ++i) {
@@ -422,7 +455,7 @@ export class Scanner {
             code = code * 16 + hexValue(ch);
         }
 
-        if (code > 0x10FFFF || ch !== '}') {
+        if (code > 0x10ffff || ch !== '}') {
             return null;
         }
 
@@ -441,11 +474,11 @@ export class Scanner {
         const start = this.index++;
         while (!this.eof()) {
             const ch = this.source.charCodeAt(this.index);
-            if (ch === 0x5C) {
+            if (ch === 0x5c) {
                 // Blackslash (U+005C) marks Unicode escape sequence.
                 this.index = start;
                 return this.getComplexIdentifier();
-            } else if (ch >= 0xD800 && ch < 0xDFFF) {
+            } else if (ch >= 0xd800 && ch < 0xdfff) {
                 // Need to handle surrogate pairs.
                 this.index = start;
                 return this.getComplexIdentifier();
@@ -467,7 +500,7 @@ export class Scanner {
 
         // '\u' (U+005C, U+0075) denotes an escaped character.
         let ch;
-        if (cp === 0x5C) {
+        if (cp === 0x5c) {
             if (this.source.charCodeAt(this.index) !== 0x75) {
                 this.throwUnexpectedToken();
             }
@@ -494,7 +527,7 @@ export class Scanner {
             this.index += ch.length;
 
             // '\u' (U+005C, U+0075) denotes an escaped character.
-            if (cp === 0x5C) {
+            if (cp === 0x5c) {
                 id = id.substr(0, id.length - 1);
                 if (this.source.charCodeAt(this.index) !== 0x75) {
                     this.throwUnexpectedToken();
@@ -505,7 +538,11 @@ export class Scanner {
                     ch = this.scanUnicodeCodePointEscape();
                 } else {
                     ch = this.scanHexEscape('u');
-                    if (ch === null || ch === '\\' || !Character.isIdentifierPart(ch.charCodeAt(0))) {
+                    if (
+                        ch === null ||
+                        ch === '\\' ||
+                        !Character.isIdentifierPart(ch.charCodeAt(0))
+                    ) {
                         this.throwUnexpectedToken();
                     }
                 }
@@ -518,7 +555,7 @@ export class Scanner {
 
     private octalToDecimal(ch: string) {
         // \0 is not octal escape sequence
-        let octal = (ch !== '0');
+        let octal = ch !== '0';
         let code = octalValue(ch);
 
         if (!this.eof() && Character.isOctalDigit(this.source.charCodeAt(this.index))) {
@@ -527,14 +564,18 @@ export class Scanner {
 
             // 3 digits are only allowed when string starts
             // with 0, 1, 2, 3
-            if ('0123'.indexOf(ch) >= 0 && !this.eof() && Character.isOctalDigit(this.source.charCodeAt(this.index))) {
+            if (
+                '0123'.indexOf(ch) >= 0 &&
+                !this.eof() &&
+                Character.isOctalDigit(this.source.charCodeAt(this.index))
+            ) {
                 code = code * 8 + octalValue(this.source[this.index++]);
             }
         }
 
         return {
             code: code,
-            octal: octal
+            octal: octal,
         };
     }
 
@@ -545,7 +586,10 @@ export class Scanner {
         const start = this.index;
 
         // Backslash (U+005C) starts an escaped character.
-        const id = (this.source.charCodeAt(start) === 0x5C) ? this.getComplexIdentifier() : this.getIdentifier();
+        const id =
+            this.source.charCodeAt(start) === 0x5c
+                ? this.getComplexIdentifier()
+                : this.getIdentifier();
 
         // There is no keyword or literal with only one character.
         // Thus, it must be an identifier.
@@ -561,7 +605,7 @@ export class Scanner {
             type = Token.Identifier;
         }
 
-        if (type !== Token.Identifier && (start + id.length !== this.index)) {
+        if (type !== Token.Identifier && start + id.length !== this.index) {
             const restore = this.index;
             this.index = start;
             this.tolerateUnexpectedToken(Messages.InvalidEscapedReservedWord);
@@ -574,7 +618,7 @@ export class Scanner {
             lineNumber: this.lineNumber,
             lineStart: this.lineStart,
             start: start,
-            end: this.index
+            end: this.index,
         };
     }
 
@@ -586,7 +630,6 @@ export class Scanner {
         // Check for most common single-character punctuators.
         let str = this.source[this.index];
         switch (str) {
-
             case '(':
             case '{':
                 if (str === '{') {
@@ -614,7 +657,8 @@ export class Scanner {
                 if (this.source[this.index] === '?') {
                     ++this.index;
                     str = '??';
-                } if (this.source[this.index] === '.' && !/^\d$/.test(this.source[this.index + 1])) {
+                }
+                if (this.source[this.index] === '.' && !/^\d$/.test(this.source[this.index + 1])) {
                     // "?." in "foo?.3:0" should not be treated as optional chaining.
                     // See https://github.com/tc39/proposal-optional-chaining#notes
                     ++this.index;
@@ -638,27 +682,45 @@ export class Scanner {
                 if (str === '>>>=') {
                     this.index += 4;
                 } else {
-
                     // 3-character punctuators.
                     str = str.substr(0, 3);
-                    if (str === '===' || str === '!==' || str === '>>>' ||
-                        str === '<<=' || str === '>>=' || str === '**=') {
+                    if (
+                        str === '===' ||
+                        str === '!==' ||
+                        str === '>>>' ||
+                        str === '<<=' ||
+                        str === '>>=' ||
+                        str === '**='
+                    ) {
                         this.index += 3;
                     } else {
-
                         // 2-character punctuators.
                         str = str.substr(0, 2);
-                        if (str === '&&' || str === '||' || str === '??' ||
-                            str === '==' || str === '!=' ||
-                            str === '+=' || str === '-=' || str === '*=' || str === '/=' ||
-                            str === '++' || str === '--' ||
-                            str === '<<' || str === '>>' ||
-                            str === '&=' || str === '|=' || str === '^=' || str === '%=' ||
-                            str === '<=' || str === '>=' || str === '=>' ||
-                            str === '**') {
+                        if (
+                            str === '&&' ||
+                            str === '||' ||
+                            str === '??' ||
+                            str === '==' ||
+                            str === '!=' ||
+                            str === '+=' ||
+                            str === '-=' ||
+                            str === '*=' ||
+                            str === '/=' ||
+                            str === '++' ||
+                            str === '--' ||
+                            str === '<<' ||
+                            str === '>>' ||
+                            str === '&=' ||
+                            str === '|=' ||
+                            str === '^=' ||
+                            str === '%=' ||
+                            str === '<=' ||
+                            str === '>=' ||
+                            str === '=>' ||
+                            str === '**'
+                        ) {
                             this.index += 2;
                         } else {
-
                             // 1-character punctuators.
                             str = this.source[this.index];
                             if ('<>=!+-*%&|^/'.indexOf(str) >= 0) {
@@ -679,7 +741,7 @@ export class Scanner {
             lineNumber: this.lineNumber,
             lineStart: this.lineStart,
             start: start,
-            end: this.index
+            end: this.index,
         };
     }
 
@@ -709,7 +771,7 @@ export class Scanner {
             lineNumber: this.lineNumber,
             lineStart: this.lineStart,
             start: start,
-            end: this.index
+            end: this.index,
         };
     }
 
@@ -744,7 +806,7 @@ export class Scanner {
             lineNumber: this.lineNumber,
             lineStart: this.lineStart,
             start: start,
-            end: this.index
+            end: this.index,
         };
     }
 
@@ -771,7 +833,10 @@ export class Scanner {
             this.throwUnexpectedToken();
         }
 
-        if (Character.isIdentifierStart(this.source.charCodeAt(this.index)) || Character.isDecimalDigit(this.source.charCodeAt(this.index))) {
+        if (
+            Character.isIdentifierStart(this.source.charCodeAt(this.index)) ||
+            Character.isDecimalDigit(this.source.charCodeAt(this.index))
+        ) {
             this.throwUnexpectedToken();
         }
 
@@ -782,7 +847,7 @@ export class Scanner {
             lineNumber: this.lineNumber,
             lineStart: this.lineStart,
             start: start,
-            end: this.index
+            end: this.index,
         };
     }
 
@@ -805,8 +870,10 @@ export class Scanner {
     private scanNumericLiteral(): RawToken {
         const start = this.index;
         let ch = this.source[start];
-        assert(Character.isDecimalDigit(ch.charCodeAt(0)) || (ch === '.'),
-            'Numeric literal must start with a decimal digit or a decimal point');
+        assert(
+            Character.isDecimalDigit(ch.charCodeAt(0)) || ch === '.',
+            'Numeric literal must start with a decimal digit or a decimal point'
+        );
 
         let num = '';
         if (ch !== '.') {
@@ -877,7 +944,7 @@ export class Scanner {
             lineNumber: this.lineNumber,
             lineStart: this.lineStart,
             start: start,
-            end: this.index
+            end: this.index,
         };
     }
 
@@ -886,8 +953,7 @@ export class Scanner {
     private scanStringLiteral(): RawToken {
         const start = this.index;
         let quote = this.source[start];
-        assert((quote === '\'' || quote === '"'),
-            'String literal must starts with a quote');
+        assert(quote === "'" || quote === '"', 'String literal must starts with a quote');
 
         ++this.index;
         let octal = false;
@@ -983,7 +1049,7 @@ export class Scanner {
             lineNumber: this.lineNumber,
             lineStart: this.lineStart,
             start: start,
-            end: this.index
+            end: this.index,
         };
     }
 
@@ -994,7 +1060,7 @@ export class Scanner {
         let terminated = false;
         const start = this.index;
 
-        const head = (this.source[start] === '`');
+        const head = this.source[start] === '`';
         let tail = false;
         let notEscapeSequenceHead: NotEscapeSequenceHead | null = null;
         let rawOffset = 2;
@@ -1034,7 +1100,8 @@ export class Scanner {
                         case 'u':
                             if (this.source[this.index] === '{') {
                                 ++this.index;
-                                const unicodeCodePointEscape = this.tryToScanUnicodeCodePointEscape();
+                                const unicodeCodePointEscape =
+                                    this.tryToScanUnicodeCodePointEscape();
                                 if (unicodeCodePointEscape === null) {
                                     notEscapeSequenceHead = 'u';
                                 } else {
@@ -1120,7 +1187,7 @@ export class Scanner {
             lineNumber: this.lineNumber,
             lineStart: this.lineStart,
             start: start,
-            end: this.index
+            end: this.index,
         };
     }
 
@@ -1144,10 +1211,10 @@ export class Scanner {
                 // for more information.)
                 .replace(/\\u\{([0-9a-fA-F]+)\}|\\u([a-fA-F0-9]{4})/g, ($0, $1, $2) => {
                     const codePoint = parseInt($1 || $2, 16);
-                    if (codePoint > 0x10FFFF) {
+                    if (codePoint > 0x10ffff) {
                         this.throwUnexpectedToken(Messages.InvalidRegExp);
                     }
-                    if (codePoint <= 0xFFFF) {
+                    if (codePoint <= 0xffff) {
                         return String.fromCharCode(codePoint);
                     }
                     return astralSubstitute;
@@ -1155,10 +1222,7 @@ export class Scanner {
                 // Replace each paired surrogate with a single ASCII symbol to
                 // avoid throwing on regular expressions that are only valid in
                 // combination with the "u" flag.
-                .replace(
-                    /[\uD800-\uDBFF][\uDC00-\uDFFF]/g,
-                    astralSubstitute
-                );
+                .replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, astralSubstitute);
         }
 
         // First, detect invalid regular expressions.
@@ -1277,7 +1341,7 @@ export class Scanner {
             lineNumber: this.lineNumber,
             lineStart: this.lineStart,
             start: start,
-            end: this.index
+            end: this.index,
         };
     }
 
@@ -1289,7 +1353,7 @@ export class Scanner {
                 lineNumber: this.lineNumber,
                 lineStart: this.lineStart,
                 start: this.index,
-                end: this.index
+                end: this.index,
             };
         }
 
@@ -1300,7 +1364,7 @@ export class Scanner {
         }
 
         // Very common: ( and ) and ;
-        if (cp === 0x28 || cp === 0x29 || cp === 0x3B) {
+        if (cp === 0x28 || cp === 0x29 || cp === 0x3b) {
             return this.scanPunctuator();
         }
 
@@ -1311,7 +1375,7 @@ export class Scanner {
 
         // Dot (.) U+002E can also start a floating-point number, hence the need
         // to check the next character.
-        if (cp === 0x2E) {
+        if (cp === 0x2e) {
             if (Character.isDecimalDigit(this.source.charCodeAt(this.index + 1))) {
                 return this.scanNumericLiteral();
             }
@@ -1324,12 +1388,12 @@ export class Scanner {
 
         // Template literals start with ` (U+0060) for template head
         // or } (U+007D) for template middle or template tail.
-        if (cp === 0x60 || (cp === 0x7D && this.curlyStack[this.curlyStack.length - 1] === '${')) {
+        if (cp === 0x60 || (cp === 0x7d && this.curlyStack[this.curlyStack.length - 1] === '${')) {
             return this.scanTemplate();
         }
 
         // Possible identifier start in a surrogate pair.
-        if (cp >= 0xD800 && cp < 0xDFFF) {
+        if (cp >= 0xd800 && cp < 0xdfff) {
             if (Character.isIdentifierStart(this.codePointAt(this.index))) {
                 return this.scanIdentifier();
             }
@@ -1337,5 +1401,4 @@ export class Scanner {
 
         return this.scanPunctuator();
     }
-
 }
