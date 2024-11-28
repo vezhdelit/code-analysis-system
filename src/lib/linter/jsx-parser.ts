@@ -15,7 +15,7 @@ interface MetaJSXElement {
 
 const enum JSXToken {
     Identifier = 100,
-    Text
+    Text,
 }
 
 interface RawJSXToken {
@@ -41,13 +41,13 @@ function getQualifiedElementName(elementName: JSXNode.JSXElementName): string {
             break;
         case JSXSyntax.JSXNamespacedName:
             const ns = elementName as JSXNode.JSXNamespacedName;
-            qualifiedName = getQualifiedElementName(ns.namespace) + ':' +
-                getQualifiedElementName(ns.name);
+            qualifiedName =
+                getQualifiedElementName(ns.namespace) + ':' + getQualifiedElementName(ns.name);
             break;
         case JSXSyntax.JSXMemberExpression:
             const expr = elementName as JSXNode.JSXMemberExpression;
-            qualifiedName = getQualifiedElementName(expr.object) + '.' +
-                getQualifiedElementName(expr.property);
+            qualifiedName =
+                getQualifiedElementName(expr.object) + '.' + getQualifiedElementName(expr.property);
             break;
         /* istanbul ignore next */
         default:
@@ -58,7 +58,6 @@ function getQualifiedElementName(elementName: JSXNode.JSXElementName): string {
 }
 
 export class JSXParser extends Parser {
-
     constructor(code: string, options, delegate) {
         super(code, options, delegate);
     }
@@ -94,7 +93,7 @@ export class JSXParser extends Parser {
         return {
             index: this.scanner.index,
             line: this.scanner.lineNumber,
-            column: this.scanner.index - this.scanner.lineStart
+            column: this.scanner.index - this.scanner.lineStart,
         };
     }
 
@@ -102,7 +101,7 @@ export class JSXParser extends Parser {
         return {
             index: this.scanner.index,
             line: this.scanner.lineNumber,
-            column: this.scanner.index - this.scanner.lineStart
+            column: this.scanner.index - this.scanner.lineStart,
         };
     }
 
@@ -119,19 +118,19 @@ export class JSXParser extends Parser {
             if (ch === quote) {
                 break;
             }
-            terminated = (ch === ';');
+            terminated = ch === ';';
             result += ch;
             ++this.scanner.index;
             if (!terminated) {
                 switch (result.length) {
                     case 2:
                         // e.g. '&#123;'
-                        numeric = (ch === '#');
+                        numeric = ch === '#';
                         break;
                     case 3:
                         if (numeric) {
                             // e.g. '&#x41;'
-                            hex = (ch === 'x');
+                            hex = ch === 'x';
                             valid = hex || Character.isDecimalDigit(ch.charCodeAt(0));
                             numeric = numeric && !hex;
                         }
@@ -165,7 +164,15 @@ export class JSXParser extends Parser {
         const cp = this.scanner.source.charCodeAt(this.scanner.index);
 
         // < > / : = { }
-        if (cp === 60 || cp === 62 || cp === 47 || cp === 58 || cp === 61 || cp === 123 || cp === 125) {
+        if (
+            cp === 60 ||
+            cp === 62 ||
+            cp === 47 ||
+            cp === 58 ||
+            cp === 61 ||
+            cp === 123 ||
+            cp === 125
+        ) {
             const value = this.scanner.source[this.scanner.index++];
             return {
                 type: Token.Punctuator,
@@ -173,7 +180,7 @@ export class JSXParser extends Parser {
                 lineNumber: this.scanner.lineNumber,
                 lineStart: this.scanner.lineStart,
                 start: this.scanner.index - 1,
-                end: this.scanner.index
+                end: this.scanner.index,
             };
         }
 
@@ -199,7 +206,7 @@ export class JSXParser extends Parser {
                 lineNumber: this.scanner.lineNumber,
                 lineStart: this.scanner.lineStart,
                 start: start,
-                end: this.scanner.index
+                end: this.scanner.index,
             };
         }
 
@@ -207,7 +214,7 @@ export class JSXParser extends Parser {
         if (cp === 46) {
             const n1 = this.scanner.source.charCodeAt(this.scanner.index + 1);
             const n2 = this.scanner.source.charCodeAt(this.scanner.index + 2);
-            const value = (n1 === 46 && n2 === 46) ? '...' : '.';
+            const value = n1 === 46 && n2 === 46 ? '...' : '.';
             const start = this.scanner.index;
             this.scanner.index += value.length;
             return {
@@ -216,7 +223,7 @@ export class JSXParser extends Parser {
                 lineNumber: this.scanner.lineNumber,
                 lineStart: this.scanner.lineStart,
                 start: start,
-                end: this.scanner.index
+                end: this.scanner.index,
             };
         }
 
@@ -229,17 +236,17 @@ export class JSXParser extends Parser {
                 lineNumber: this.scanner.lineNumber,
                 lineStart: this.scanner.lineStart,
                 start: this.scanner.index,
-                end: this.scanner.index
+                end: this.scanner.index,
             };
         }
 
         // Identifer can not contain backslash (char code 92).
-        if (Character.isIdentifierStart(cp) && (cp !== 92)) {
+        if (Character.isIdentifierStart(cp) && cp !== 92) {
             const start = this.scanner.index;
             ++this.scanner.index;
             while (!this.scanner.eof()) {
                 const ch = this.scanner.source.charCodeAt(this.scanner.index);
-                if (Character.isIdentifierPart(ch) && (ch !== 92)) {
+                if (Character.isIdentifierPart(ch) && ch !== 92) {
                     ++this.scanner.index;
                 } else if (ch === 45) {
                     // Hyphen (char code 45) can be part of an identifier.
@@ -255,7 +262,7 @@ export class JSXParser extends Parser {
                 lineNumber: this.scanner.lineNumber,
                 lineStart: this.scanner.lineStart,
                 start: start,
-                end: this.scanner.index
+                end: this.scanner.index,
             };
         }
 
@@ -274,6 +281,7 @@ export class JSXParser extends Parser {
         this.lastMarker.column = this.scanner.index - this.scanner.lineStart;
 
         if (this.config.tokens) {
+            //eslint-disable-next-line @typescript-eslint/no-explicit-any
             this.tokens.push(this.convertToken(token as any));
         }
 
@@ -314,10 +322,11 @@ export class JSXParser extends Parser {
             lineNumber: this.scanner.lineNumber,
             lineStart: this.scanner.lineStart,
             start: start,
-            end: this.scanner.index
+            end: this.scanner.index,
         };
 
-        if ((text.length > 0) && this.config.tokens) {
+        if (text.length > 0 && this.config.tokens) {
+            //eslint-disable-next-line @typescript-eslint/no-explicit-any
             this.tokens.push(this.convertToken(token as any));
         }
 
@@ -373,7 +382,10 @@ export class JSXParser extends Parser {
                 const object = elementName;
                 this.expectJSX('.');
                 const property = this.parseJSXIdentifier();
-                elementName = this.finalize(node, new JSXNode.JSXMemberExpression(object, property));
+                elementName = this.finalize(
+                    node,
+                    new JSXNode.JSXMemberExpression(object, property)
+                );
             }
         }
 
@@ -424,8 +436,11 @@ export class JSXParser extends Parser {
     }
 
     parseJSXAttributeValue(): JSXNode.JSXAttributeValue {
-        return this.matchJSX('{') ? this.parseJSXExpressionAttribute() :
-            this.matchJSX('<') ? this.parseJSXElement() : this.parseJSXStringLiteralAttribute();
+        return this.matchJSX('{')
+            ? this.parseJSXExpressionAttribute()
+            : this.matchJSX('<')
+              ? this.parseJSXElement()
+              : this.parseJSXStringLiteralAttribute();
     }
 
     parseJSXNameValueAttribute(): JSXNode.JSXAttribute {
@@ -455,8 +470,9 @@ export class JSXParser extends Parser {
         const attributes: JSXNode.JSXElementAttribute[] = [];
 
         while (!this.matchJSX('/') && !this.matchJSX('>')) {
-            const attribute = this.matchJSX('{') ? this.parseJSXSpreadAttribute() :
-                this.parseJSXNameValueAttribute();
+            const attribute = this.matchJSX('{')
+                ? this.parseJSXSpreadAttribute()
+                : this.parseJSXNameValueAttribute();
             attributes.push(attribute);
         }
 
@@ -483,7 +499,11 @@ export class JSXParser extends Parser {
         return this.finalize(node, new JSXNode.JSXOpeningElement(name, selfClosing, attributes));
     }
 
-    parseJSXBoundaryElement(): JSXNode.JSXOpeningElement | JSXNode.JSXClosingElement | JSXNode.JSXOpeningFragment | JSXNode.JSXClosingFragment {
+    parseJSXBoundaryElement():
+        | JSXNode.JSXOpeningElement
+        | JSXNode.JSXClosingElement
+        | JSXNode.JSXOpeningFragment
+        | JSXNode.JSXClosingFragment {
         const node = this.createJSXNode();
 
         this.expectJSX('<');
@@ -576,13 +596,20 @@ export class JSXParser extends Parser {
             }
             if (element.type === JSXSyntax.JSXClosingElement) {
                 el.closing = element as JSXNode.JSXClosingElement;
-                const open = getQualifiedElementName((el.opening as JSXNode.JSXOpeningElement).name);
-                const close = getQualifiedElementName((el.closing as JSXNode.JSXClosingElement).name);
+                const open = getQualifiedElementName(
+                    (el.opening as JSXNode.JSXOpeningElement).name
+                );
+                const close = getQualifiedElementName(
+                    (el.closing as JSXNode.JSXClosingElement).name
+                );
                 if (open !== close) {
                     this.tolerateError('Expected corresponding JSX closing tag for %0', open);
                 }
                 if (stack.length > 0) {
-                    const child = this.finalize(el.node, new JSXNode.JSXElement(el.opening, el.children, el.closing));
+                    const child = this.finalize(
+                        el.node,
+                        new JSXNode.JSXElement(el.opening, el.children, el.closing)
+                    );
                     el = stack[stack.length - 1];
                     el.children.push(child);
                     stack.pop();
@@ -635,5 +662,4 @@ export class JSXParser extends Parser {
     isStartOfExpression(): boolean {
         return super.isStartOfExpression() || this.match('<');
     }
-
 }

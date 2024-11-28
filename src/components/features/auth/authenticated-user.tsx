@@ -19,13 +19,13 @@ export function AuthenticatedUser() {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <button className='flex items-center gap-2 data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'>
+                <button className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground flex items-center gap-2'>
                     <Avatar className='size-8 rounded-lg'>
-                        <AvatarImage src={user.avatar} alt={user.name} />
+                        <AvatarImage src={''} alt={''} />
                         <AvatarFallback className='rounded-lg'>👻</AvatarFallback>
                     </Avatar>
                     <div className='grid flex-1 text-left text-sm leading-tight'>
-                        <span className='truncate font-semibold'>{user.name}</span>
+                        <span className='truncate font-semibold'>{''}</span>
                         <span className='truncate text-xs'>{user.email}</span>
                     </div>
                     <ChevronsUpDown className='ml-auto size-4' />
@@ -35,11 +35,11 @@ export function AuthenticatedUser() {
                 <DropdownMenuLabel className='p-0 font-normal'>
                     <div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
                         <Avatar className='size-8 rounded-lg'>
-                            <AvatarImage src={user.avatar} alt={user.name} />
+                            <AvatarImage src={''} alt={''} />
                             <AvatarFallback className='rounded-lg'>👻</AvatarFallback>
                         </Avatar>
                         <div className='grid flex-1 text-left text-sm leading-tight'>
-                            <span className='truncate font-semibold'>{user.name}</span>
+                            <span className='truncate font-semibold'>{''}</span>
                             <span className='truncate text-xs'>{user.email}</span>
                         </div>
                     </div>

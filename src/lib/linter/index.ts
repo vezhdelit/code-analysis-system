@@ -38,11 +38,11 @@ export function parse(code: string, options, delegate) {
         }
     };
 
-    let parserDelegate = (typeof delegate === 'function') ? proxyDelegate : null;
+    let parserDelegate = typeof delegate === 'function' ? proxyDelegate : null;
     let collectComment = false;
     if (options) {
-        collectComment = (typeof options.comment === 'boolean' && options.comment);
-        const attachComment = (typeof options.attachComment === 'boolean' && options.attachComment);
+        collectComment = typeof options.comment === 'boolean' && options.comment;
+        const attachComment = typeof options.attachComment === 'boolean' && options.attachComment;
         if (collectComment || attachComment) {
             commentHandler = new CommentHandler();
             commentHandler.attach = attachComment;
@@ -53,7 +53,7 @@ export function parse(code: string, options, delegate) {
 
     let isModule = false;
     if (options && typeof options.sourceType === 'string') {
-        isModule = (options.sourceType === 'module');
+        isModule = options.sourceType === 'module';
     }
 
     let parser: Parser;
@@ -64,6 +64,7 @@ export function parse(code: string, options, delegate) {
     }
 
     const program = isModule ? parser.parseModule() : parser.parseScript();
+    //eslint-disable-next-line @typescript-eslint/no-explicit-any
     const ast = program as any;
 
     if (collectComment && commentHandler) {
@@ -93,7 +94,7 @@ export function parseScript(code: string, options, delegate) {
 
 export function tokenize(code: string, options, delegate) {
     const tokenizer = new Tokenizer(code, options);
-
+    //eslint-disable-next-line @typescript-eslint/no-explicit-any
     const tokens: any = [];
 
     try {

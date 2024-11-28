@@ -14,6 +14,7 @@ interface Entry {
 }
 
 interface NodeInfo {
+    //eslint-disable-next-line @typescript-eslint/no-explicit-any
     node: any;
     start: number;
 }
@@ -133,15 +134,15 @@ export class CommentHandler {
 
         this.stack.push({
             node: node,
-            start: metadata.start.offset
+            start: metadata.start.offset,
         });
     }
 
     visitComment(node, metadata) {
-        const type = (node.type[0] === 'L') ? 'Line' : 'Block';
+        const type = node.type[0] === 'L' ? 'Line' : 'Block';
         const comment: Comment = {
             type: type,
-            value: node.value
+            value: node.value,
         };
         if (node.range) {
             comment.range = node.range;
@@ -156,9 +157,9 @@ export class CommentHandler {
                 comment: {
                     type: type,
                     value: node.value,
-                    range: [metadata.start.offset, metadata.end.offset]
+                    range: [metadata.start.offset, metadata.end.offset],
                 },
-                start: metadata.start.offset
+                start: metadata.start.offset,
             };
             if (node.loc) {
                 entry.comment.loc = node.loc;
@@ -178,5 +179,4 @@ export class CommentHandler {
             this.visitNode(node, metadata);
         }
     }
-
 }
