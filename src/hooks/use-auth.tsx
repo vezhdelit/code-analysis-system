@@ -46,7 +46,7 @@ export const useLogin = () => {
         },
         onSuccess: async () => {
             toast.success('Login successful.');
-            router.push(ROUTE_PATH.dashboard);
+            router.push(ROUTE_PATH.projects);
         },
         onError: () => {
             toast.error('Login failed.');
@@ -69,7 +69,7 @@ export const useVerify = () => {
         },
         onSuccess: () => {
             toast.success('Registration successful. You are logged in.');
-            router.push(ROUTE_PATH.dashboard);
+            router.push(ROUTE_PATH.projects);
         },
         onError: () => {
             toast.error('Registration failed. Please try again.');

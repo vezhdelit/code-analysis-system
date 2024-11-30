@@ -38,7 +38,7 @@ export default async function Page() {
                 <ClientUser />
                 <div className='flex items-center gap-4'>
                     <Button asChild className='w-28'>
-                        <Link href={ROUTE_PATH.dashboard}>Dashboard</Link>
+                        <Link href={ROUTE_PATH.projects}>My Projects</Link>
                     </Button>
                     <Logout>
                         <Button className='w-28' variant='destructive'>

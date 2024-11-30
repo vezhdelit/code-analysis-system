@@ -8,7 +8,7 @@ export async function middleware(request: NextRequest) {
     if (!data) {
         return NextResponse.next();
     }
-    return NextResponse.redirect(new URL(ROUTE_PATH.dashboard, request.url));
+    return NextResponse.redirect(new URL(ROUTE_PATH.projects, request.url));
 }
 
 export const config = {

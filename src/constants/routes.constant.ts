@@ -1,6 +1,6 @@
 export const ROUTE_PATH = {
     home: '/',
-    dashboard: '/dashboard',
+    projects: '/projects',
 
     scalar: '/scalar',
     terms: '/terms',

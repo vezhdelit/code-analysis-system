@@ -18,7 +18,7 @@ export function SimpleCodeEditor({
     };
 
     return (
-        <div className='h-[calc(100svh-88px)] w-full rounded-md bg-muted p-2 pb-4'>
+        <div className='h-[calc(100svh-128px)] w-full rounded-md rounded-tl-none bg-muted p-2 pb-4'>
             <div className='flex h-1 gap-2'>
                 <div className='flex min-w-6 select-none flex-col items-center overflow-hidden py-2 text-right font-mono text-sm text-transparent'>
                     {/* last line number*/}
