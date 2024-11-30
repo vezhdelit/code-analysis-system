@@ -48,7 +48,7 @@ export const analyzeCode: OpenAPIHonoRouteHandler<AnalyzeCodeRoute> = async c =>
         const [updated] = await db
             .update(results)
             .set({
-                resultData: JSON.stringify(analysisResult),
+                resultData: analysisResult,
             })
             .where(eq(results.id, exist.id))
             .returning();
@@ -60,7 +60,7 @@ export const analyzeCode: OpenAPIHonoRouteHandler<AnalyzeCodeRoute> = async c =>
         .insert(results)
         .values({
             analysisType,
-            resultData: JSON.stringify(analysisResult),
+            resultData: analysisResult,
             codeId,
             projectId,
         })

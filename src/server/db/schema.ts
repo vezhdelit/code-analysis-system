@@ -2,6 +2,7 @@ import { relations } from 'drizzle-orm';
 import {
     boolean,
     integer,
+    json,
     pgTable,
     serial,
     text,
@@ -92,7 +93,7 @@ export const codes = pgTable('codes', {
 export const results = pgTable('results', {
     id: serial('id').primaryKey(),
     analysisType: varchar('analysis_type', { length: 255 }).notNull(),
-    resultData: text('result_data').notNull(),
+    resultData: json('result_data').notNull(),
     createdAt: timestamp('created_at', { withTimezone: true, mode: 'date' }).defaultNow().notNull(),
     updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'date' })
         .defaultNow()

@@ -25,3 +25,24 @@ export const addCodeResponseSchema = z.object({
 });
 
 export const getProjectCodesResponseSchema = z.array(addCodeResponseSchema);
+
+export const getOneCodeParamsSchema = z.object({
+    projectId: z.coerce.number().openapi({
+        param: {
+            name: 'projectId',
+            in: 'path',
+        },
+        required: ['projectId'],
+        example: 42,
+    }),
+    codeId: z.coerce.number().openapi({
+        param: {
+            name: 'codeId',
+            in: 'path',
+        },
+        required: ['codeId'],
+        example: 42,
+    }),
+});
+
+export const getOneCodeResponseSchema = addCodeResponseSchema;

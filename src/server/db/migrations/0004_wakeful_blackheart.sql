@@ -1,0 +1,1 @@
+ALTER TABLE "results" ALTER COLUMN "result_data" SET DATA TYPE json;

@@ -38,6 +38,6 @@ export const analyzeCodeResponseSchema = z.object({
     codeId: z.number(),
     projectId: z.number(),
     analysisType: z.string(),
-    resultData: z.string(),
+    resultData: z.any(),
     createdAt: z.string(),
 });
