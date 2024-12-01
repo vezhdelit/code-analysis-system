@@ -1,4 +1,3 @@
-'use client';
 import dashedArrowAnim from '@/assets/animations/dashed-arrow-anim.json';
 import Lottie from 'lottie-react';
 
