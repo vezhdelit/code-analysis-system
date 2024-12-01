@@ -95,3 +95,36 @@ export const useUpdateCode = () => {
         },
     });
 };
+
+const deleteProjectCodeDelete = client.api.projects[':projectId'].codes[':codeId'].$delete;
+
+type DeleteCodeRequestType = InferRequestType<typeof deleteProjectCodeDelete>;
+type DeleteCodeResponseType = {
+    projectId: string | number;
+    codeId: string | number;
+};
+export const useDeleteCode = () => {
+    const queryClient = useQueryClient();
+    return useMutation<DeleteCodeResponseType, Error, DeleteCodeRequestType>({
+        mutationFn: async request => {
+            const response =
+                await client.api.projects[':projectId'].codes[':codeId'].$delete(request);
+            if (!response.ok) {
+                throw new Error(response.statusText);
+            }
+            return {
+                projectId: request.param.projectId,
+                codeId: request.param.codeId,
+            };
+        },
+        onSuccess: data => {
+            queryClient.invalidateQueries({
+                queryKey: ['projects', data.projectId.toString(), 'codes'],
+            });
+            toast.success('Code deleted successfully.');
+        },
+        onError: () => {
+            toast.error('Failed to delete code.');
+        },
+    });
+};

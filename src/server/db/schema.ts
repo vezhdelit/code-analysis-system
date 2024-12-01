@@ -87,7 +87,7 @@ export const codes = pgTable('codes', {
         .$onUpdate(() => new Date()),
     projectId: integer('project_id')
         .notNull()
-        .references(() => projects.id),
+        .references(() => projects.id, { onDelete: 'cascade' }),
 });
 
 export const results = pgTable('results', {
@@ -101,10 +101,10 @@ export const results = pgTable('results', {
         .$onUpdate(() => new Date()),
     codeId: integer('code_id')
         .notNull()
-        .references(() => codes.id),
+        .references(() => codes.id, { onDelete: 'cascade' }),
     projectId: integer('project_id')
         .notNull()
-        .references(() => projects.id),
+        .references(() => projects.id, { onDelete: 'cascade' }),
 });
 
 // Define Relations

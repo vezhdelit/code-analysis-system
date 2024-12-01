@@ -14,45 +14,41 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ROUTE_PATH } from '@/constants/routes.constant';
-import { useAddCodeToProject } from '@/hooks/use-codes';
+import { useAddProject } from '@/hooks/use-projects';
 import { cn } from '@/lib/utils';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 type Props = {
-    projectId: string | number;
     children: React.ReactNode;
 };
 
-const AddCodeToProjectDialog = ({ projectId, children }: Props) => {
+const AddProjectDialog = ({ children }: Props) => {
     const router = useRouter();
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-    const [codeSnippetName, setSnippetCodeName] = useState('');
+    const [projectName, setProjectName] = useState('');
 
-    const addCodeToProject = useAddCodeToProject();
+    const addProject = useAddProject();
 
     return (
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger>{children}</DialogTrigger>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>
-                        Add code to project{' '}
-                        <span className='font-semibold text-accent-foreground/50'>{projectId}</span>
-                    </DialogTitle>
+                    <DialogTitle>Add new project to workspace</DialogTitle>
                     <DialogDescription>
-                        Add a new code to this project. You can analyze your code after adding it.
+                        Add a new project to your workspace. You can add codes to this project after
                     </DialogDescription>
                 </DialogHeader>
                 <div className='flex flex-col space-y-2'>
                     <Label>Name</Label>
                     <Input
-                        value={codeSnippetName}
-                        onChange={e => setSnippetCodeName(e.target.value)}
+                        value={projectName}
+                        onChange={e => setProjectName(e.target.value)}
                         type='text'
-                        placeholder='Enter code snippet name'
+                        placeholder='Enter project name'
                     />
                 </div>
                 <DialogFooter>
@@ -63,32 +59,28 @@ const AddCodeToProjectDialog = ({ projectId, children }: Props) => {
                     </DialogClose>
                     <Button
                         onClick={async () => {
-                            await addCodeToProject
+                            await addProject
                                 .mutateAsync({
-                                    param: { projectId: projectId.toString() },
                                     json: {
-                                        name: codeSnippetName,
-                                        content: '',
+                                        name: projectName,
                                     },
                                 })
                                 .then(data => {
                                     setIsDialogOpen(false);
-                                    setSnippetCodeName('');
-                                    router.push(
-                                        `${ROUTE_PATH.projects}/${projectId}/codes/${data.id}`
-                                    );
+                                    setProjectName('');
+                                    router.push(`${ROUTE_PATH.projects}/${data.id}`);
                                 });
                         }}
-                        disabled={!codeSnippetName}
+                        disabled={!projectName}
                         type='button'
                         className='w-full'>
                         <Loader2
                             className={cn(
                                 'size-4 animate-spin',
-                                addCodeToProject.isPending ? 'inline' : 'hidden'
+                                addProject.isPending ? 'inline' : 'hidden'
                             )}
                         />
-                        Add code
+                        Add project
                     </Button>
                 </DialogFooter>
             </DialogContent>
@@ -96,4 +88,4 @@ const AddCodeToProjectDialog = ({ projectId, children }: Props) => {
     );
 };
 
-export default AddCodeToProjectDialog;
+export default AddProjectDialog;

@@ -45,7 +45,13 @@ export const useAnalyzeCode = () => {
         },
         onSuccess: data => {
             queryClient.invalidateQueries({
-                queryKey: ['projects', data.projectId, 'codes', data.codeId, 'analysis'],
+                queryKey: [
+                    'projects',
+                    data.projectId.toString(),
+                    'codes',
+                    data.codeId.toString(),
+                    'analysis',
+                ],
             });
             toast.success('Code analyzed successfully.');
             return data;

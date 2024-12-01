@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const addCodeSchema = z.object({
     name: z.string().min(1, 'Code name is required'),
-    content: z.string().min(1, 'Code content is required'),
+    content: z.string(),
 });
 
 export const addCodeParamsSchema = z.object({

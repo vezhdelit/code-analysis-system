@@ -3,9 +3,10 @@
 import AddCodeToProjectDialog from '@/components/features/projects/add-code-to-project-dialog-';
 import { Button } from '@/components/ui/button';
 import { ROUTE_PATH } from '@/constants/routes.constant';
-import { useGetProjectCodes } from '@/hooks/use-codes';
+import { useDeleteCode, useGetProjectCodes } from '@/hooks/use-codes';
 import { cn } from '@/lib/utils';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { GoPlus, GoX } from 'react-icons/go';
 
 type Props = {
     projectId: string | number;
@@ -13,41 +14,58 @@ type Props = {
 };
 
 const CodesTopbar = ({ projectId, codeId }: Props) => {
+    const router = useRouter();
     const { data: codes } = useGetProjectCodes({ projectId });
+
+    const deleteCode = useDeleteCode();
 
     return (
         <div className='flex items-center gap-2 pt-2'>
             <div className='flex items-center justify-between pl-5'>
-                <h2 className='text-base font-semibold text-accent-foreground/50'>
-                    Codes {codes?.length ? `(${codes.length})` : ''}
+                <h2 className='text-base font-semibold leading-3 text-accent-foreground/50'>
+                    Code snippets {codes?.length ? `(${codes.length})` : ''}
                 </h2>
             </div>
 
             <div className='flex items-center gap-1'>
-                {codes?.map(code => (
-                    <Button
-                        variant='ghost'
-                        size={'sm'}
-                        key={code.id}
-                        className={cn(
-                            'h-7',
-                            codeId == code.id &&
-                                'rounded-none rounded-t-lg bg-background text-primary'
-                        )}
-                        asChild>
-                        <Link href={`${ROUTE_PATH.projects}/${projectId}/codes/${code.id}`}>
-                            {code.name}
-                        </Link>
+                <AddCodeToProjectDialog projectId={projectId}>
+                    <Button className={'h-6 gap-0.5 text-xs'} variant='secondary' size={'sm'}>
+                        <GoPlus /> New code
                     </Button>
+                </AddCodeToProjectDialog>
+
+                {codes?.map(code => (
+                    <div key={code.id} className='relative flex items-center'>
+                        <Button
+                            onClick={() =>
+                                router.push(`${ROUTE_PATH.projects}/${projectId}/codes/${code.id}`)
+                            }
+                            variant='ghost'
+                            size={'sm'}
+                            className={cn(
+                                'h-6',
+                                codeId == code.id &&
+                                    'h-7 rounded-none rounded-t-lg bg-background text-primary hover:bg-background hover:text-primary'
+                            )}>
+                            {code.name}
+                            <button
+                                className='hover:scale-125'
+                                onClick={e => {
+                                    e.stopPropagation();
+                                    deleteCode.mutate({
+                                        param: {
+                                            projectId: projectId.toString(),
+                                            codeId: code.id.toString(),
+                                        },
+                                    });
+
+                                    router.push(`${ROUTE_PATH.projects}/${projectId}`);
+                                }}>
+                                <GoX />
+                            </button>
+                        </Button>
+                    </div>
                 ))}
-                {/* <Button
-                    className={'-mt-0.5 size-6 rounded-full'}
-                    variant='ghost'
-                    size={'sm'}
-                    onClick={() => {}}>
-                    <GoPlus className='size-5' />
-                </Button> */}
-                <AddCodeToProjectDialog projectId={projectId} />
             </div>
         </div>
     );

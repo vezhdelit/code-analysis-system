@@ -9,7 +9,7 @@ import { useGetOneCode, useUpdateCode } from '@/hooks/use-codes';
 import { cn } from '@/lib/utils';
 import { Loader2 } from 'lucide-react';
 import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 export default function CodePage() {
     const params = useParams<{
@@ -20,10 +20,8 @@ export default function CodePage() {
     const codeId = params.code_id;
 
     const { data: code } = useGetOneCode({ projectId, codeId });
-    const { data: analysisResult } = useGetCodeAnalysisResults({ projectId, codeId });
 
     const updateCode = useUpdateCode();
-    const codeAnalysis = useAnalyzeCode();
 
     const [content, setContent] = useState('//Write your code here');
 
@@ -36,12 +34,12 @@ export default function CodePage() {
     return (
         <main className='flex flex-1'>
             <div className='flex w-full gap-5'>
-                <div className='flex w-full flex-col rounded-lg bg-muted'>
+                <div className='relative flex w-full flex-col rounded-lg bg-muted'>
                     <CodesTopbar projectId={projectId} codeId={codeId} />
                     <SimpleCodeEditor code={content} setCode={setContent} />
-                </div>
-                <div className='flex w-1/3 flex-col gap-2'>
                     <Button
+                        disabled={updateCode.isPending || content === code?.content}
+                        className='absolute bottom-4 right-4'
                         onClick={() => {
                             updateCode.mutate({
                                 param: { projectId, codeId },
@@ -59,40 +57,66 @@ export default function CodePage() {
                         />
                         Save code
                     </Button>
-                    <Button
-                        disabled={
-                            codeAnalysis.isPending ||
-                            (code?.content === content && !!analysisResult?.resultData)
-                        }
-                        onClick={() => {
-                            codeAnalysis.mutate({
-                                param: { projectId, codeId },
-                                json: {
-                                    analysisType: 'parse',
-                                    config: {
-                                        tolerant: true,
-                                        comment: true,
-                                        range: true,
-                                        loc: true,
-                                    },
-                                },
-                            });
-                        }}>
-                        <Loader2
-                            className={cn(
-                                'size-4 animate-spin',
-                                codeAnalysis.isPending ? 'inline' : 'hidden'
-                            )}
-                        />
-                        Analyze
-                    </Button>
-                    <ScrollArea className='h-[calc(100dvh-148px)] pr-3'>
-                        {analysisResult?.resultData && (
-                            <CodeBreakdown analysis={JSON.parse(analysisResult.resultData)} />
-                        )}
-                    </ScrollArea>
                 </div>
+                <AnalysisBlock projectId={projectId} codeId={codeId} />
             </div>
         </main>
     );
 }
+
+interface AnalysisBlockProps {
+    projectId: string;
+    codeId: string;
+}
+const AnalysisBlock = ({ projectId, codeId }: AnalysisBlockProps) => {
+    const { data: analysisResult } = useGetCodeAnalysisResults({ projectId, codeId });
+    const codeAnalysis = useAnalyzeCode();
+
+    const parsedToJsonResult = useMemo(() => {
+        if (!analysisResult?.resultData) return null;
+        if (typeof analysisResult.resultData === 'object') return analysisResult.resultData;
+        try {
+            return JSON.parse(analysisResult.resultData);
+        } catch (e) {
+            return null;
+        }
+    }, [analysisResult]);
+
+    return (
+        <div className='flex w-1/3 flex-col gap-2 rounded-lg bg-muted p-2'>
+            <div className='flex items-center justify-between pl-3'>
+                <h2 className='text-base font-semibold text-accent-foreground/50'>
+                    Analysis results
+                </h2>
+            </div>
+
+            <Button
+                disabled={codeAnalysis.isPending}
+                onClick={() => {
+                    codeAnalysis.mutate({
+                        param: { projectId, codeId },
+                        json: {
+                            analysisType: 'parse',
+                            config: {
+                                tolerant: true,
+                                comment: true,
+                                range: true,
+                                loc: true,
+                            },
+                        },
+                    });
+                }}>
+                <Loader2
+                    className={cn(
+                        'size-4 animate-spin',
+                        codeAnalysis.isPending ? 'inline' : 'hidden'
+                    )}
+                />
+                Analyze
+            </Button>
+            <ScrollArea className='h-[calc(100dvh-208px)] pr-3'>
+                <CodeBreakdown analysis={parsedToJsonResult} />
+            </ScrollArea>
+        </div>
+    );
+};

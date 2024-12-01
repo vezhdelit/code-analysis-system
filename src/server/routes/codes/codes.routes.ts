@@ -82,6 +82,25 @@ export const getOneCode = createRoute({
     },
 });
 
+export const deleteCode = createRoute({
+    tags,
+    path: '/api/projects/{projectId}/codes/{codeId}',
+    method: 'delete',
+    request: {
+        params: getOneCodeParamsSchema,
+    },
+    responses: {
+        [HTTP_STATUS_CODES.NO_CONTENT]: {
+            description: 'Code deleted',
+        },
+        [HTTP_STATUS_CODES.NOT_FOUND]: jsonContent(notFoundSchema, 'Code not found'),
+        [HTTP_STATUS_CODES.UNPROCESSABLE_ENTITY]: jsonContent(
+            createErrorSchema(getOneCodeParamsSchema),
+            'Invalid request body'
+        ),
+    },
+});
+
 export const getProjectCodes = createRoute({
     tags,
     path: '/api/projects/{projectId}/codes',
@@ -98,4 +117,5 @@ export const getProjectCodes = createRoute({
 export type AddCodeRoute = typeof addCode;
 export type UpdateCodeRoute = typeof updateCode;
 export type GetOneCodeRoute = typeof getOneCode;
+export type DeleteCodeRoute = typeof deleteCode;
 export type GetProjectCodesRoute = typeof getProjectCodes;

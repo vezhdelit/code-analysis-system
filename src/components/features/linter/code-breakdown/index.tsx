@@ -5,7 +5,7 @@ import TokensSection from '@/components/features/linter/code-breakdown/tokens-se
 const CodeBreakdown = ({ analysis }: { analysis: any }) => {
     if (!analysis) return null;
     return (
-        <div className='flex flex-col gap-2 bg-gray-100 font-sans'>
+        <div className='flex flex-col gap-2 font-sans'>
             <TokensSection tokens={analysis.body} />
             <CommentsSection comments={analysis.comments} />
             <ErrorSection errors={analysis.errors} />

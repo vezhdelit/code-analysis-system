@@ -4,6 +4,7 @@ import * as routes from './projects.routes';
 
 const projectsRouter = createRouter()
     .openapi(routes.createProject, handlers.createProject)
-    .openapi(routes.getProjects, handlers.getProjects);
+    .openapi(routes.getProjects, handlers.getProjects)
+    .openapi(routes.deleteProject, handlers.deleteProject);
 
 export default projectsRouter;

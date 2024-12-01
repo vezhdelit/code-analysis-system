@@ -17,3 +17,14 @@ export const getProjectsResponseSchema = z.array(
         createdAt: z.string(),
     })
 );
+
+export const deleteProjectParamsSchema = z.object({
+    projectId: z.coerce.number().openapi({
+        param: {
+            name: 'projectId',
+            in: 'path',
+        },
+        required: ['projectId'],
+        example: 42,
+    }),
+});

@@ -36,6 +36,20 @@
       "when": 1732990560476,
       "tag": "0004_wakeful_blackheart",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1733008800703,
+      "tag": "0005_lazy_frank_castle",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1733011568346,
+      "tag": "0006_curved_tomorrow_man",
+      "breakpoints": true
     }
   ]
 }

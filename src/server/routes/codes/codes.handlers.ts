@@ -3,6 +3,7 @@ import { db } from '@/server/db';
 import { codes, projects } from '@/server/db/schema';
 import type {
     AddCodeRoute,
+    DeleteCodeRoute,
     GetOneCodeRoute,
     GetProjectCodesRoute,
     UpdateCodeRoute,
@@ -97,6 +98,30 @@ export const getOneCode: OpenAPIHonoRouteHandler<GetOneCodeRoute> = async c => {
     return c.json(code, HTTP_STATUS_CODES.OK);
 };
 
+export const deleteCode: OpenAPIHonoRouteHandler<DeleteCodeRoute> = async c => {
+    const { projectId, codeId } = c.req.valid('param');
+
+    const user = c.get('user')!;
+    const userId = user.id;
+
+    const project = await db.query.projects.findFirst({
+        where: and(eq(projects.id, projectId), eq(projects.userId, userId)),
+    });
+    if (!project) {
+        return c.json({ message: 'Project not found.' }, HTTP_STATUS_CODES.NOT_FOUND);
+    }
+
+    const [deleted] = await db
+        .delete(codes)
+        .where(and(eq(codes.id, codeId), eq(codes.projectId, projectId)))
+        .returning();
+
+    if (!deleted) {
+        return c.json({ message: 'Code not found.' }, HTTP_STATUS_CODES.NOT_FOUND);
+    }
+    return c.body(null, HTTP_STATUS_CODES.NO_CONTENT);
+};
+
 export const getProjectCodes: OpenAPIHonoRouteHandler<GetProjectCodesRoute> = async c => {
     const { projectId } = c.req.valid('param');
 
@@ -113,6 +138,7 @@ export const getProjectCodes: OpenAPIHonoRouteHandler<GetProjectCodesRoute> = as
 
     const projectCodes = await db.query.codes.findMany({
         where: eq(codes.projectId, projectId),
+        orderBy: (codes, { desc }) => [desc(codes.createdAt)],
     });
 
     return c.json(projectCodes, HTTP_STATUS_CODES.OK);
