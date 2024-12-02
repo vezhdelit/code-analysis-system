@@ -17,6 +17,7 @@ import { type Login, loginSchema } from '@/server/schemas/auth';
 import { ErrorMessage } from '@hookform/error-message';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 
 export function LoginForm() {
@@ -31,6 +32,8 @@ export function LoginForm() {
         criteriaMode: 'all',
     });
 
+    const t = useTranslations('auth');
+
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(values => mutate(values))} className='space-y-4'>
@@ -39,11 +42,11 @@ export function LoginForm() {
                     name='email'
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Email</FormLabel>
+                            <FormLabel>{t('labels.email')}</FormLabel>
                             <FormControl>
                                 <Input
                                     autoComplete='email'
-                                    placeholder='hey@example.com'
+                                    placeholder={t('labels.email_placeholder')}
                                     {...field}
                                 />
                             </FormControl>
@@ -58,11 +61,11 @@ export function LoginForm() {
                         <FormItem>
                             <div className='space-y-2 leading-none'>
                                 <div className='space-y-1'>
-                                    <FormLabel>Password</FormLabel>
+                                    <FormLabel>{t('labels.password')}</FormLabel>
                                 </div>
                                 <FormControl>
                                     <PasswordInput
-                                        placeholder='Your password'
+                                        placeholder={t('labels.password_placeholder')}
                                         autoComplete='current-password'
                                         {...field}
                                     />
@@ -89,7 +92,7 @@ export function LoginForm() {
                     <Loader2
                         className={cn('size-4 animate-spin', isPending ? 'inline' : 'hidden')}
                     />
-                    Login
+                    {t('labels.login')}
                 </Button>
             </form>
         </Form>

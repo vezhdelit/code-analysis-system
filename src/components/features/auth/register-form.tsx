@@ -14,11 +14,12 @@ import {
 import { Input } from '@/components/ui/input';
 import { ROUTE_PATH } from '@/constants/routes.constant';
 import { useRegister } from '@/hooks/use-auth';
+import { Link as LocaleLink } from '@/i18n/routing';
 import { cn } from '@/lib/utils';
 import { type SendRegistrationCode, sendRegistrationCodeSchema } from '@/server/schemas/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
-import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 
 export function RegisterForm() {
@@ -31,6 +32,8 @@ export function RegisterForm() {
         },
     });
 
+    const t = useTranslations('auth');
+
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(values => mutate(values))} className='space-y-4'>
@@ -39,12 +42,12 @@ export function RegisterForm() {
                     name='email'
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Email</FormLabel>
+                            <FormLabel>{t('labels.email')}</FormLabel>
                             <FormDescription>
-                                We will send you a verification link at the following email.
+                                {t('labels.we_will_send_verification')}
                             </FormDescription>
                             <FormControl>
-                                <Input placeholder='hey@example.com' {...field} />
+                                <Input placeholder={t('labels.email_placeholder')} {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -64,18 +67,18 @@ export function RegisterForm() {
                                 </FormControl>
                                 <div className='space-y-1 leading-none'>
                                     <FormDescription>
-                                        I agree to the{' '}
-                                        <Link
+                                        {t('labels.terms_i_agree')}{' '}
+                                        <LocaleLink
                                             href={ROUTE_PATH.terms}
                                             className='text-link underline'>
-                                            Terms of Service
-                                        </Link>{' '}
-                                        and{' '}
-                                        <Link
+                                            {t('labels.terms_of_service')}
+                                        </LocaleLink>{' '}
+                                        {t('labels.terms_and')}{' '}
+                                        <LocaleLink
                                             href={ROUTE_PATH.privacy}
                                             className='text-link underline'>
-                                            Privacy Policy
-                                        </Link>
+                                            {t('labels.privacy_policy')}
+                                        </LocaleLink>
                                     </FormDescription>
                                 </div>
                             </div>
@@ -87,7 +90,7 @@ export function RegisterForm() {
                     <Loader2
                         className={cn('size-4 animate-spin', isPending ? 'inline' : 'hidden')}
                     />
-                    Continue
+                    {t('labels.continue')}
                 </Button>
             </form>
         </Form>

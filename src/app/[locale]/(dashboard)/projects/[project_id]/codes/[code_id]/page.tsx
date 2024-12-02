@@ -8,6 +8,7 @@ import { useAnalyzeCode, useGetCodeAnalysisResults } from '@/hooks/use-analysis'
 import { useGetOneCode, useUpdateCode } from '@/hooks/use-codes';
 import { cn } from '@/lib/utils';
 import { Loader2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -20,6 +21,8 @@ export default function CodePage() {
     const codeId = params.code_id;
 
     const { data: code } = useGetOneCode({ projectId, codeId });
+
+    const t = useTranslations('codes');
 
     const updateCode = useUpdateCode();
 
@@ -55,7 +58,7 @@ export default function CodePage() {
                                 updateCode.isPending ? 'inline' : 'hidden'
                             )}
                         />
-                        Save code
+                        {t('labels.save_code')}
                     </Button>
                 </div>
                 <AnalysisBlock projectId={projectId} codeId={codeId} />
@@ -72,6 +75,8 @@ const AnalysisBlock = ({ projectId, codeId }: AnalysisBlockProps) => {
     const { data: analysisResult } = useGetCodeAnalysisResults({ projectId, codeId });
     const codeAnalysis = useAnalyzeCode();
 
+    const t = useTranslations('analysis');
+
     const parsedToJsonResult = useMemo(() => {
         if (!analysisResult?.resultData) return null;
         if (typeof analysisResult.resultData === 'object') return analysisResult.resultData;
@@ -86,7 +91,7 @@ const AnalysisBlock = ({ projectId, codeId }: AnalysisBlockProps) => {
         <div className='flex w-1/3 flex-col gap-2 rounded-lg bg-muted p-2'>
             <div className='flex items-center justify-between pl-3'>
                 <h2 className='text-base font-semibold text-accent-foreground/50'>
-                    Analysis results
+                    {t('labels.analysis_results')}
                 </h2>
             </div>
 
@@ -112,7 +117,7 @@ const AnalysisBlock = ({ projectId, codeId }: AnalysisBlockProps) => {
                         codeAnalysis.isPending ? 'inline' : 'hidden'
                     )}
                 />
-                Analyze
+                {t('labels.analyze')}
             </Button>
             <ScrollArea className='h-[calc(100dvh-208px)] pr-3'>
                 <CodeBreakdown analysis={parsedToJsonResult} />

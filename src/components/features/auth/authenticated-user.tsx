@@ -13,9 +13,13 @@ import {
 import { useAuth } from '@/providers/auth-provider';
 import { logout } from '@/server/actions';
 import { ChevronsUpDown, LogOut } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export function AuthenticatedUser() {
     const { user } = useAuth();
+
+    const t = useTranslations('auth');
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -48,7 +52,7 @@ export function AuthenticatedUser() {
                 <ThemeToggleSidebar />
                 <DropdownMenuItem onClick={logout}>
                     <LogOut />
-                    Log out
+                    {t('labels.logout')}
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

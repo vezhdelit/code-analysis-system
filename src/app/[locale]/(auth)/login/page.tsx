@@ -8,31 +8,34 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 import { ROUTE_PATH } from '@/constants/routes.constant';
+import { Link as LocaleLink } from '@/i18n/routing';
 import type { Metadata } from 'next';
-import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
 
 export const metadata: Metadata = {
     title: 'Login',
     description: 'Welcome back!',
 };
 
-export default function LoginPage() {
+export default async function LoginPage() {
+    const t = await getTranslations('auth');
+
     return (
         <div className='flex h-full items-center'>
             <Card className='mx-auto w-[28rem] max-w-lg'>
                 <CardHeader>
-                    <CardTitle>Login</CardTitle>
-                    <CardDescription>Welcome back!</CardDescription>
+                    <CardTitle>{t('labels.login')}</CardTitle>
+                    <CardDescription>{t('labels.welcome_back')}</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <LoginForm />
                 </CardContent>
                 <CardFooter className='flex-col items-center gap-2 text-sm'>
                     <div>
-                        <span>Don&apos;t have an account? </span>
-                        <Link className='text-link underline' href={ROUTE_PATH.register}>
-                            Create one
-                        </Link>
+                        <span>{t('labels.dont_have_account')}</span>
+                        <LocaleLink className='text-link underline' href={ROUTE_PATH.register}>
+                            {t('labels.create_one')}
+                        </LocaleLink>
                     </div>
                 </CardFooter>
             </Card>

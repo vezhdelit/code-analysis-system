@@ -4,8 +4,9 @@ import AddCodeToProjectDialog from '@/components/features/projects/add-code-to-p
 import { Button } from '@/components/ui/button';
 import { ROUTE_PATH } from '@/constants/routes.constant';
 import { useDeleteCode, useGetProjectCodes } from '@/hooks/use-codes';
+import { useRouter } from '@/i18n/routing';
 import { cn } from '@/lib/utils';
-import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { GoPlus, GoX } from 'react-icons/go';
 
 type Props = {
@@ -14,23 +15,25 @@ type Props = {
 };
 
 const CodesTopbar = ({ projectId, codeId }: Props) => {
-    const router = useRouter();
+    const localeRouter = useRouter();
     const { data: codes } = useGetProjectCodes({ projectId });
 
     const deleteCode = useDeleteCode();
+
+    const t = useTranslations('codes');
 
     return (
         <div className='flex items-center gap-2 pt-2'>
             <div className='flex items-center justify-between pl-5'>
                 <h2 className='text-base font-semibold leading-3 text-accent-foreground/50'>
-                    Code snippets {codes?.length ? `(${codes.length})` : ''}
+                    {t('labels.code_snippets')} {codes?.length ? `(${codes.length})` : ''}
                 </h2>
             </div>
 
             <div className='flex items-center gap-1'>
                 <AddCodeToProjectDialog projectId={projectId}>
                     <Button className={'h-6 gap-0.5 text-xs'} variant='secondary' size={'sm'}>
-                        <GoPlus /> New code
+                        <GoPlus /> {t('labels.new_code')}
                     </Button>
                 </AddCodeToProjectDialog>
 
@@ -38,7 +41,9 @@ const CodesTopbar = ({ projectId, codeId }: Props) => {
                     <div key={code.id} className='relative flex items-center'>
                         <Button
                             onClick={() =>
-                                router.push(`${ROUTE_PATH.projects}/${projectId}/codes/${code.id}`)
+                                localeRouter.push(
+                                    `${ROUTE_PATH.projects}/${projectId}/codes/${code.id}`
+                                )
                             }
                             variant='ghost'
                             size={'sm'}
@@ -59,7 +64,7 @@ const CodesTopbar = ({ projectId, codeId }: Props) => {
                                         },
                                     });
 
-                                    router.push(`${ROUTE_PATH.projects}/${projectId}`);
+                                    localeRouter.push(`${ROUTE_PATH.projects}/${projectId}`);
                                 }}>
                                 <GoX />
                             </button>

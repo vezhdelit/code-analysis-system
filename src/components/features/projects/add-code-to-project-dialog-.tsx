@@ -15,9 +15,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ROUTE_PATH } from '@/constants/routes.constant';
 import { useAddCodeToProject } from '@/hooks/use-codes';
+import { useRouter } from '@/i18n/routing';
 import { cn } from '@/lib/utils';
 import { Loader2 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 type Props = {
@@ -26,12 +27,14 @@ type Props = {
 };
 
 const AddCodeToProjectDialog = ({ projectId, children }: Props) => {
-    const router = useRouter();
+    const localeRouter = useRouter();
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
     const [codeSnippetName, setSnippetCodeName] = useState('');
 
     const addCodeToProject = useAddCodeToProject();
+
+    const t = useTranslations('codes');
 
     return (
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -39,26 +42,26 @@ const AddCodeToProjectDialog = ({ projectId, children }: Props) => {
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>
-                        Add code to project{' '}
+                        {t('labels.add_code_to_project')}{' '}
                         <span className='font-semibold text-accent-foreground/50'>{projectId}</span>
                     </DialogTitle>
                     <DialogDescription>
-                        Add a new code to this project. You can analyze your code after adding it.
+                        {t('labels.add_code_to_project_description')}
                     </DialogDescription>
                 </DialogHeader>
                 <div className='flex flex-col space-y-2'>
-                    <Label>Name</Label>
+                    <Label>{t('labels.name')}</Label>
                     <Input
                         value={codeSnippetName}
                         onChange={e => setSnippetCodeName(e.target.value)}
                         type='text'
-                        placeholder='Enter code snippet name'
+                        placeholder={t('labels.name_placeholder')}
                     />
                 </div>
                 <DialogFooter>
                     <DialogClose asChild>
                         <Button variant={'outline'} type='button' className='w-full'>
-                            Cancel
+                            {t('labels.cancel')}
                         </Button>
                     </DialogClose>
                     <Button
@@ -74,7 +77,7 @@ const AddCodeToProjectDialog = ({ projectId, children }: Props) => {
                                 .then(data => {
                                     setIsDialogOpen(false);
                                     setSnippetCodeName('');
-                                    router.push(
+                                    localeRouter.push(
                                         `${ROUTE_PATH.projects}/${projectId}/codes/${data.id}`
                                     );
                                 });
@@ -88,7 +91,7 @@ const AddCodeToProjectDialog = ({ projectId, children }: Props) => {
                                 addCodeToProject.isPending ? 'inline' : 'hidden'
                             )}
                         />
-                        Add code
+                        {t('labels.add_code')}
                     </Button>
                 </DialogFooter>
             </DialogContent>

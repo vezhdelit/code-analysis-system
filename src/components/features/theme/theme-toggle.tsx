@@ -14,6 +14,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { LaptopIcon, MoonIcon, SunIcon } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useTheme } from 'next-themes';
 import { useSyncExternalStore } from 'react';
 
@@ -21,6 +22,7 @@ const emptySubscribe = () => () => {};
 
 export function ThemeToggle() {
     const useThemeProps = useTheme();
+    const t = useTranslations('theme');
 
     // https://tkdodo.eu/blog/avoiding-hydration-mismatches-with-use-sync-external-store
     const themeValue = useSyncExternalStore(
@@ -50,21 +52,21 @@ export function ThemeToggle() {
                     {(theme === 'dark' || (theme === 'system' && systemDark)) && (
                         <MoonIcon className='size-5' />
                     )}
-                    <span className='sr-only'>Toggle theme</span>
+                    <span className='sr-only'>{t('labels.theme')}</span>
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align='end'>
                 <DropdownMenuItem onClick={() => setTheme('light')}>
                     <SunIcon className='mr-2 size-4' />
-                    <span>Light</span>
+                    <span>{t('labels.light')}</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setTheme('dark')}>
                     <MoonIcon className='mr-2 size-4' />
-                    <span>Dark</span>
+                    <span>{t('labels.dark')}</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setTheme('system')}>
                     <LaptopIcon className='mr-2 size-4' />
-                    <span>System</span>
+                    <span>{t('labels.system')}</span>
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
@@ -73,6 +75,7 @@ export function ThemeToggle() {
 
 export function ThemeToggleSidebar() {
     const useThemeProps = useTheme();
+    const t = useTranslations('theme');
 
     // https://tkdodo.eu/blog/avoiding-hydration-mismatches-with-use-sync-external-store
     const themeValue = useSyncExternalStore(
@@ -84,7 +87,7 @@ export function ThemeToggleSidebar() {
     if (!themeValue) {
         return (
             <DropdownMenuSubTrigger>
-                <MoonIcon /> Toggle theme
+                <MoonIcon /> {t('labels.theme')}
             </DropdownMenuSubTrigger>
         );
     }
@@ -101,22 +104,22 @@ export function ThemeToggleSidebar() {
                 {(theme === 'dark' || (theme === 'system' && systemDark)) && (
                     <MoonIcon className='size-4' />
                 )}
-                <span>Toggle theme</span>
+                <span>{t('labels.theme')}</span>
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
                 <DropdownMenuSubContent>
                     <DropdownMenuRadioGroup value={theme} onValueChange={setTheme}>
                         <DropdownMenuRadioItem className='gap-2' value='light'>
                             <SunIcon className='size-4' />
-                            <span>Light</span>
+                            <span>{t('labels.light')}</span>
                         </DropdownMenuRadioItem>
                         <DropdownMenuRadioItem className='gap-2' value='dark'>
                             <MoonIcon className='size-4' />
-                            <span>Dark</span>
+                            <span>{t('labels.dark')}</span>
                         </DropdownMenuRadioItem>
                         <DropdownMenuRadioItem className='gap-2' value='system'>
                             <LaptopIcon className='size-4' />
-                            <span>System</span>
+                            <span>{t('labels.system')}</span>
                         </DropdownMenuRadioItem>
                     </DropdownMenuRadioGroup>
                 </DropdownMenuSubContent>

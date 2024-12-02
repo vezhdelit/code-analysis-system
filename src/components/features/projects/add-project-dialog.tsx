@@ -15,9 +15,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ROUTE_PATH } from '@/constants/routes.constant';
 import { useAddProject } from '@/hooks/use-projects';
+import { useRouter } from '@/i18n/routing';
 import { cn } from '@/lib/utils';
 import { Loader2 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 type Props = {
@@ -25,36 +26,36 @@ type Props = {
 };
 
 const AddProjectDialog = ({ children }: Props) => {
-    const router = useRouter();
+    const localeRouter = useRouter();
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
     const [projectName, setProjectName] = useState('');
 
     const addProject = useAddProject();
 
+    const t = useTranslations('projects');
+
     return (
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger>{children}</DialogTrigger>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Add new project to workspace</DialogTitle>
-                    <DialogDescription>
-                        Add a new project to your workspace. You can add codes to this project after
-                    </DialogDescription>
+                    <DialogTitle>{t('labels.add_project')}</DialogTitle>
+                    <DialogDescription>{t('labels.add_project_description')}</DialogDescription>
                 </DialogHeader>
                 <div className='flex flex-col space-y-2'>
-                    <Label>Name</Label>
+                    <Label>{t('labels.name')}</Label>
                     <Input
                         value={projectName}
                         onChange={e => setProjectName(e.target.value)}
                         type='text'
-                        placeholder='Enter project name'
+                        placeholder={t('labels.name_placeholder')}
                     />
                 </div>
                 <DialogFooter>
                     <DialogClose asChild>
                         <Button variant={'outline'} type='button' className='w-full'>
-                            Cancel
+                            {t('labels.cancel')}
                         </Button>
                     </DialogClose>
                     <Button
@@ -68,7 +69,7 @@ const AddProjectDialog = ({ children }: Props) => {
                                 .then(data => {
                                     setIsDialogOpen(false);
                                     setProjectName('');
-                                    router.push(`${ROUTE_PATH.projects}/${data.id}`);
+                                    localeRouter.push(`${ROUTE_PATH.projects}/${data.id}`);
                                 });
                         }}
                         disabled={!projectName}
@@ -80,7 +81,7 @@ const AddProjectDialog = ({ children }: Props) => {
                                 addProject.isPending ? 'inline' : 'hidden'
                             )}
                         />
-                        Add project
+                        {t('labels.add')}
                     </Button>
                 </DialogFooter>
             </DialogContent>

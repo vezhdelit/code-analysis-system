@@ -1,5 +1,124 @@
 {
     "shared": {
-        "app_name": "Code analysis"
+        "app_name": "Code analysis",
+        "buttons": {
+            "api": "API"
+        },
+        "labels": {
+            "loading": "Loading..."
+        }
+    },
+    "theme": {
+        "labels": {
+            "theme": "Theme",
+            "light": "Light",
+            "dark": "Dark",
+            "system": "System"
+        }
+    },
+    "auth": {
+        "labels": {
+            "email": "Email",
+            "email_placeholder": "Enter your email",
+            "we_will_send_verification": "We will send you a verification link at the following email.",
+
+            "login": "Login",
+            "welcome_back": "Welcome back",
+            "dont_have_account": "Don't have an account?",
+            "create_one": "Create one",
+
+            "register": "Register",
+            "welcome": "Welcome",
+            "already_registered": "Already have an account?",
+
+            "verify_email": "Verify your email address",
+            "almost_there": "Almost there!",
+
+            "password": "Password",
+            "password_placeholder": "Enter your password",
+            "choose_strong_password": "Choose a strong password",
+            "confirmation_code": "Confirmation code",
+            "check_email": "Check your email.",
+
+            "continue": "Continue",
+
+            "logout": "Logout",
+
+            "terms_i_agree": "I agree to the",
+            "terms_of_service": "Terms of Service",
+            "terms_and": "and",
+            "privacy_policy": "Privacy Policy",
+
+            "toast_register_code_send": "Verification code sent to your email.",
+            "toast_register_code_send_failed": "Failed to send verification code.",
+
+            "toast_login": "Logged in successfully.",
+            "toast_login_failed": "Failed to login.",
+
+            "toast_verify": "Registration successful. You are logged in.",
+            "toast_verify_failed": "Registration failed. Please try again."
+        }
+    },
+    "projects": {
+        "labels": {
+            "my_projects": "My projects",
+            "projects": "Projects",
+            "new_project": "New project",
+            "choose_or_create_project": "Choose or create a project to get started",
+
+            "add_project": "Add new project to workspace",
+            "add_project_description": "Add a new project to your workspace. You can analyze your code after adding it.",
+
+            "name": "Name",
+            "name_placeholder": "Enter project name",
+            "cancel": "Cancel",
+
+            "add": "Add project",
+
+            "toast_project_added": "Project added successfully.",
+            "toast_project_added_failed": "Failed to add project.",
+
+            "toast_project_deleted": "Project deleted successfully.",
+            "toast_project_deleted_failed": "Failed to delete project."
+        }
+    },
+    "codes": {
+        "labels": {
+            "code_snippets": "Code snippets",
+            "new_code": "New code",
+            "choose_or_create_code": "Choose or create a code to get started",
+
+            "add_code_to_project": "Add code to project",
+            "add_code_to_project_description": "Add a new code to this project. You can analyze your code after adding it.",
+
+            "name": "Name",
+            "name_placeholder": "Enter code snippet name",
+            "cancel": "Cancel",
+            "add_code": "Add code",
+
+            "save_code": "Save code",
+
+            "toast_code_added": "Code added successfully.",
+            "toast_code_added_failed": "Failed to add code.",
+
+            "toast_code_updated": "Code updated successfully.",
+            "toast_code_updated_failed": "Failed to update code.",
+
+            "toast_code_deleted": "Code deleted successfully.",
+            "toast_code_deleted_failed": "Failed to delete code."
+        }
+    },
+    "analysis": {
+        "labels": {
+            "analysis_results": "Analysis results",
+            "analyze": "Analyze",
+
+            "tokens": "Tokens",
+            "commets": "Comments",
+            "errors": "Errors",
+
+            "toast_analysis": "Code analyzed successfully.",
+            "toast_analysis_failed": "Failed to analyze code."
+        }
     }
 }

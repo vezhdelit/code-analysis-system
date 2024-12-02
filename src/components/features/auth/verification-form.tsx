@@ -18,6 +18,7 @@ import { type Verify, verifySchema } from '@/server/schemas/auth';
 import { ErrorMessage } from '@hookform/error-message';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 
 export function VerificationForm({ email }: { email: string }) {
@@ -32,6 +33,7 @@ export function VerificationForm({ email }: { email: string }) {
     });
 
     const { mutate, isPending } = useVerify();
+    const t = useTranslations('auth');
 
     return (
         <Form {...form}>
@@ -43,11 +45,16 @@ export function VerificationForm({ email }: { email: string }) {
                         <FormItem>
                             <div className='space-y-2 leading-none'>
                                 <div className='space-y-1'>
-                                    <FormLabel>Password</FormLabel>
-                                    <FormDescription>Choose a strong password.</FormDescription>
+                                    <FormLabel>{t('labels.password')}</FormLabel>
+                                    <FormDescription>
+                                        {t('labels.choose_strong_password')}
+                                    </FormDescription>
                                 </div>
                                 <FormControl>
-                                    <PasswordInput placeholder='Enter password' {...field} />
+                                    <PasswordInput
+                                        placeholder={t('labels.password_placeholder')}
+                                        {...field}
+                                    />
                                 </FormControl>
                                 <ErrorMessage
                                     errors={form.formState.errors}
@@ -74,8 +81,8 @@ export function VerificationForm({ email }: { email: string }) {
                         <FormItem>
                             <div className='space-y-2 leading-none'>
                                 <div className='space-y-1'>
-                                    <FormLabel>Confirmation Code</FormLabel>
-                                    <FormDescription>Check your email.</FormDescription>
+                                    <FormLabel>{t('labels.confirmation_code')}</FormLabel>
+                                    <FormDescription>{t('labels.check_email')}</FormDescription>
                                 </div>
                                 <div className='flex items-center justify-center'>
                                     <FormControl>
@@ -101,7 +108,7 @@ export function VerificationForm({ email }: { email: string }) {
                     <Loader2
                         className={cn('size-4 animate-spin', isPending ? 'inline' : 'hidden')}
                     />
-                    Continue
+                    {t('labels.continue')}
                 </Button>
             </form>
         </Form>

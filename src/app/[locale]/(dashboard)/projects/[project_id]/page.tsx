@@ -3,6 +3,7 @@
 import dashedArrowAnim from '@/assets/animations/dashed-arrow-anim.json';
 import CodesTopbar from '@/components/features/layout/codes-topbar';
 import Lottie from 'lottie-react';
+import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
 
 export default function ProjectPage() {
@@ -11,6 +12,8 @@ export default function ProjectPage() {
         code_id: string;
     }>();
     const projectId = params.project_id;
+
+    const t = useTranslations('codes');
 
     return (
         <main className='flex flex-1 flex-col items-start justify-center rounded-lg bg-muted'>
@@ -22,8 +25,7 @@ export default function ProjectPage() {
                     loop={false}
                 />
                 <span className='text-center text-xl font-semibold text-accent-foreground/50'>
-                    You choosed an project #{projectId} <br /> Now create an code snippet or choose
-                    an existing one
+                    {t('labels.choose_or_create_code')}
                 </span>
             </div>
         </main>

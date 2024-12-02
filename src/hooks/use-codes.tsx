@@ -1,6 +1,7 @@
 import { client } from '@/server/rpc';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { InferRequestType, InferResponseType } from 'hono';
+import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
 export const useGetProjectCodes = ({ projectId }: { projectId: string | number }) => {
@@ -45,6 +46,7 @@ type AddCodeResponseType = InferResponseType<typeof addProjectPost, 201>;
 type AddCodeRequestType = InferRequestType<typeof addProjectPost>;
 
 export const useAddCodeToProject = () => {
+    const t = useTranslations('codes');
     const queryClient = useQueryClient();
     return useMutation<AddCodeResponseType, Error, AddCodeRequestType>({
         mutationFn: async request => {
@@ -58,11 +60,11 @@ export const useAddCodeToProject = () => {
             queryClient.invalidateQueries({
                 queryKey: ['projects', data.projectId.toString(), 'codes'],
             });
-            toast.success('Code added successfully.');
+            toast.success(t('labels.toast_code_added'));
             return data;
         },
         onError: () => {
-            toast.error('Failed to add code.');
+            toast.error(t('labels.toast_code_added'));
         },
     });
 };
@@ -73,6 +75,7 @@ type UpdateCodeResponseType = InferResponseType<typeof updateProjectCodePatch, 2
 type UpdateCodeRequestType = InferRequestType<typeof updateProjectCodePatch>;
 
 export const useUpdateCode = () => {
+    const t = useTranslations('codes');
     const queryClient = useQueryClient();
     return useMutation<UpdateCodeResponseType, Error, UpdateCodeRequestType>({
         mutationFn: async request => {
@@ -87,11 +90,11 @@ export const useUpdateCode = () => {
             queryClient.invalidateQueries({
                 queryKey: ['projects', data.projectId.toString(), 'codes'],
             });
-            toast.success('Code updated successfully.');
+            toast.success(t('labels.toast_code_updated'));
             return data;
         },
         onError: () => {
-            toast.error('Failed to update code.');
+            toast.error(t('labels.toast_code_updated_failed'));
         },
     });
 };
@@ -104,6 +107,7 @@ type DeleteCodeResponseType = {
     codeId: string | number;
 };
 export const useDeleteCode = () => {
+    const t = useTranslations('codes');
     const queryClient = useQueryClient();
     return useMutation<DeleteCodeResponseType, Error, DeleteCodeRequestType>({
         mutationFn: async request => {
@@ -121,10 +125,10 @@ export const useDeleteCode = () => {
             queryClient.invalidateQueries({
                 queryKey: ['projects', data.projectId.toString(), 'codes'],
             });
-            toast.success('Code deleted successfully.');
+            toast.success(t('labels.toast_code_deleted'));
         },
         onError: () => {
-            toast.error('Failed to delete code.');
+            toast.error(t('labels.toast_code_deleted_failed'));
         },
     });
 };

@@ -1,6 +1,7 @@
 import { client } from '@/server/rpc';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { InferRequestType, InferResponseType } from 'hono';
+import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
 export const useGetCodeAnalysisResults = ({
@@ -32,6 +33,7 @@ type AnalyzeCodeResponseType = InferResponseType<typeof $post, 200>;
 type AnalyzeCodeRequestType = InferRequestType<typeof $post>;
 
 export const useAnalyzeCode = () => {
+    const t = useTranslations('analysis');
     const queryClient = useQueryClient();
     return useMutation<AnalyzeCodeResponseType, Error, AnalyzeCodeRequestType>({
         mutationFn: async request => {
@@ -53,11 +55,11 @@ export const useAnalyzeCode = () => {
                     'analysis',
                 ],
             });
-            toast.success('Code analyzed successfully.');
+            toast.success(t('labels.toast_analysis'));
             return data;
         },
         onError: () => {
-            toast.error('Failed to analyze code.');
+            toast.error(t('labels.toast_analysis_failed'));
         },
     });
 };

@@ -1,12 +1,14 @@
 import { ROUTE_PATH } from '@/constants/routes.constant';
+import { useRouter } from '@/i18n/routing';
 import { client } from '@/server/rpc';
 import type { Login, SendRegistrationCode, Verify } from '@/server/schemas/auth';
 import { useMutation } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
 export const useRegister = () => {
-    const router = useRouter();
+    const localeRouter = useRouter();
+    const t = useTranslations('auth');
     return useMutation<unknown, Error, SendRegistrationCode, unknown>({
         mutationKey: ['register'],
         mutationFn: async input => {
@@ -21,17 +23,18 @@ export const useRegister = () => {
             return { email: input.email };
         },
         onSuccess: (_, { email }) => {
-            toast.success('Verification code sent to your email.');
-            router.push(ROUTE_PATH.verify + '?' + new URLSearchParams({ email }).toString());
+            toast.success(t('labels.toast_register_code_send'));
+            localeRouter.push(ROUTE_PATH.verify + '?' + new URLSearchParams({ email }).toString());
         },
         onError: () => {
-            toast.error('Failed to send verification code');
+            toast.error(t('labels.toast_register_code_send_failed'));
         },
     });
 };
 
 export const useLogin = () => {
-    const router = useRouter();
+    const t = useTranslations('auth');
+    const localeRouter = useRouter();
 
     return useMutation<unknown, Error, Login, unknown>({
         mutationKey: ['login'],
@@ -45,17 +48,19 @@ export const useLogin = () => {
             }
         },
         onSuccess: async () => {
-            toast.success('Login successful.');
-            router.push(ROUTE_PATH.projects);
+            toast.success(t('labels.toast_login'));
+            localeRouter.push(ROUTE_PATH.projects);
         },
         onError: () => {
-            toast.error('Login failed.');
+            toast.error(t('labels.toast_login_failed'));
         },
     });
 };
 
 export const useVerify = () => {
-    const router = useRouter();
+    const localeRouter = useRouter();
+    const t = useTranslations('auth');
+
     return useMutation<unknown, Error, Verify>({
         mutationKey: ['user-verification'],
         mutationFn: async json => {
@@ -68,11 +73,11 @@ export const useVerify = () => {
             }
         },
         onSuccess: () => {
-            toast.success('Registration successful. You are logged in.');
-            router.push(ROUTE_PATH.projects);
+            toast.success(t('labels.toast_verify'));
+            localeRouter.push(ROUTE_PATH.projects);
         },
         onError: () => {
-            toast.error('Registration failed. Please try again.');
+            toast.error(t('labels.toast_verify_failed'));
         },
     });
 };
