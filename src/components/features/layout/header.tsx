@@ -11,10 +11,6 @@ export const Header = async () => {
                 Hono x Lucia
             </Link>
 
-            <Link href={ROUTE_PATH.docs} className='font-semibold'>
-                API
-            </Link>
-
             <div className='flex items-center gap-5'>
                 <Button variant={'link'} asChild>
                     <Link href={ROUTE_PATH.docs} className='font-semibold'>
