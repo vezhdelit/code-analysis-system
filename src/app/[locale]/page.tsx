@@ -15,7 +15,7 @@ export default async function Page() {
             <>
                 <Header />
 
-                <main className='container flex flex-1 -translate-y-[5%] flex-col items-center justify-center gap-4 overflow-auto'>
+                <main className='container flex flex-1 translate-y-[-5%] flex-col items-center justify-center gap-4 overflow-auto'>
                     <h1 className='text-4xl font-semibold'>Hono x Lucia</h1>
                     <div className='flex items-center gap-4'>
                         <Button asChild className='w-28'>
@@ -33,7 +33,7 @@ export default async function Page() {
     return (
         <AuthProvider user={user}>
             <AuthHeader />
-            <main className='container flex flex-1 -translate-y-[5%] flex-col items-center justify-center gap-4'>
+            <main className='container flex flex-1 translate-y-[-5%] flex-col items-center justify-center gap-4'>
                 <h1 className='text-4xl font-semibold'>Hono x Lucia</h1>
                 <ClientUser />
                 <div className='flex items-center gap-4'>
