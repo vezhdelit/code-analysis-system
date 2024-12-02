@@ -1,8 +1,8 @@
-'use client';
-
 import dynamic from 'next/dynamic';
 
-const LeftArrowAnim = dynamic(() => import('@/components/features/projects/left-arrow-anim'));
+const LeftArrowAnim = dynamic(() => import('@/components/features/projects/left-arrow-anim'), {
+    ssr: false,
+});
 
 export default function ProjectsPage() {
     return (
