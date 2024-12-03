@@ -114,7 +114,7 @@
             "analyze": "Analyze",
 
             "tokens": "Tokens",
-            "commets": "Comments",
+            "comments": "Comments",
             "errors": "Errors",
 
             "toast_analysis": "Code analyzed successfully.",

@@ -36,6 +36,7 @@ export function SimpleCodeEditor({
                         ))}
                     </div>
                     <Textarea
+                        spellCheck={false}
                         value={code}
                         onKeyDown={e => {
                             if (e.key == 'Tab') {
