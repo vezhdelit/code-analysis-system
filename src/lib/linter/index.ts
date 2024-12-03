@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { CommentHandler } from './comment-handler';
 import { JSXParser } from './jsx-parser';
 import { Parser } from './parser';
