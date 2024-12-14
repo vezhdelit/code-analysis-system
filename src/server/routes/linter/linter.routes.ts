@@ -51,6 +51,7 @@ export const parseCode = createRoute({
                     config: {
                         tolerant: true,
                         comment: false,
+                        security: true,
                         range: false,
                         loc: false,
                     },

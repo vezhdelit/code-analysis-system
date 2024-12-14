@@ -1,17 +1,18 @@
 import { z } from 'zod';
 
+const configSchema = z.object({
+    tolerant: z.boolean().optional(),
+    comment: z.boolean().optional(),
+    security: z.boolean().optional(),
+    range: z.boolean().optional(),
+    loc: z.boolean().optional(),
+});
+
 export const analyzeCodeSchema = z.object({
     analysisType: z.enum(['tokenize', 'parse']).openapi('Analysis type', {
         example: 'tokenize',
     }),
-    config: z
-        .object({
-            tolerant: z.boolean().optional(),
-            comment: z.boolean().optional(),
-            range: z.boolean().optional(),
-            loc: z.boolean().optional(),
-        })
-        .optional(),
+    config: configSchema.optional(),
 });
 
 export const analyzeCodeParamsSchema = z.object({

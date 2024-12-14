@@ -24,13 +24,22 @@ export function parse(code: string, options, delegate) {
 
     let parserDelegate = typeof delegate === 'function' ? proxyDelegate : null;
     let collectComment = false;
+    let collectVulnerabilities = false;
+
     if (options) {
         collectComment = typeof options.comment === 'boolean' && options.comment;
+        collectVulnerabilities = typeof options.security === 'boolean' && options.security;
+
         const attachComment = typeof options.attachComment === 'boolean' && options.attachComment;
         if (collectComment || attachComment) {
             commentHandler = new CommentHandler();
             commentHandler.attach = attachComment;
             options.comment = true;
+            parserDelegate = proxyDelegate;
+        }
+
+        if (collectVulnerabilities) {
+            securityHandler = new SecurityHandler();
             parserDelegate = proxyDelegate;
         }
     }
@@ -60,8 +69,9 @@ export function parse(code: string, options, delegate) {
     if (parser.config.tolerant) {
         ast.errors = parser.errorHandler.errors;
     }
-
-    ast.vulnerabilities = parser.securityHandler.vulnerabilities;
+    if (collectVulnerabilities && securityHandler) {
+        ast.vulnerabilities = securityHandler.vulnerabilities;
+    }
 
     return ast;
 }

@@ -15,6 +15,7 @@ interface Config {
     tokens: boolean;
     comment: boolean;
     tolerant: boolean;
+    security: boolean;
 }
 
 interface Context {
@@ -96,6 +97,7 @@ export class Parser {
             tokens: typeof options.tokens === 'boolean' && options.tokens,
             comment: typeof options.comment === 'boolean' && options.comment,
             tolerant: typeof options.tolerant === 'boolean' && options.tolerant,
+            security: typeof options.security === 'boolean' && options.security,
         };
         if (this.config.loc && options.source && options.source !== null) {
             this.config.source = String(options.source);
@@ -457,8 +459,10 @@ export class Parser {
             loc: node.loc,
         };
 
-        // Check for security vulnerabilities
-        this.securityHandler.visit(node, metadata);
+        // Only check security if enabled in config
+        if (this.config.security) {
+            this.securityHandler.visit(node, metadata);
+        }
 
         if (this.delegate) {
             this.delegate(node, metadata);

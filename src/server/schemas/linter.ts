@@ -27,6 +27,7 @@ export const parseSchema = z.object({
         .object({
             tolerant: z.boolean().optional(),
             comment: z.boolean().optional(),
+            security: z.boolean().optional(),
             range: z.boolean().optional(),
             loc: z.boolean().optional(),
         })
