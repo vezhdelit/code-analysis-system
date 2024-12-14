@@ -3,16 +3,22 @@
 import { CommentHandler } from './comment-handler';
 import { JSXParser } from './jsx-parser';
 import { Parser } from './parser';
+import { SecurityHandler } from './security-handler';
 import { Tokenizer } from './tokenizer';
 
 export function parse(code: string, options, delegate) {
     let commentHandler: CommentHandler | null = null;
+    let securityHandler: SecurityHandler | null = null;
+
     const proxyDelegate = (node, metadata) => {
         if (delegate) {
             delegate(node, metadata);
         }
         if (commentHandler) {
             commentHandler.visit(node, metadata);
+        }
+        if (securityHandler) {
+            securityHandler.visit(node, metadata);
         }
     };
 
@@ -55,7 +61,7 @@ export function parse(code: string, options, delegate) {
         ast.errors = parser.errorHandler.errors;
     }
 
-    ast.vulnerabilities = parser.securityAnalyzer.getVulnerabilities();
+    ast.vulnerabilities = parser.securityHandler.vulnerabilities;
 
     return ast;
 }

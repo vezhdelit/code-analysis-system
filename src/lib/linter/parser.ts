@@ -4,7 +4,7 @@ import { ErrorHandler } from './error-handler';
 import { Messages } from './messages';
 import * as Node from './nodes';
 import { Comment, RawToken, Scanner, type SourceLocation } from './scanner';
-import { SecurityAnalyzer } from './security-analyzer';
+import { SecurityHandler } from './security-handler';
 import { Syntax } from './syntax';
 import { Token, TokenName } from './token';
 
@@ -72,13 +72,11 @@ interface ParseTemplateLiteralOptions {
 
 export class Parser {
     readonly config: Config;
-    //eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly delegate: any;
     readonly errorHandler: ErrorHandler;
+    readonly securityHandler: SecurityHandler;
     readonly scanner: Scanner;
-    //eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly operatorPrecedence: any;
-    readonly securityAnalyzer: SecurityAnalyzer;
 
     lookahead: RawToken;
     hasLineTerminator: boolean;
@@ -107,6 +105,7 @@ export class Parser {
 
         this.errorHandler = new ErrorHandler();
         this.errorHandler.tolerant = this.config.tolerant;
+        this.securityHandler = new SecurityHandler();
         this.scanner = new Scanner(code, this.errorHandler);
         this.scanner.trackComment = this.config.comment;
 
@@ -184,7 +183,6 @@ export class Parser {
             line: this.scanner.lineNumber,
             column: this.scanner.index - this.scanner.lineStart,
         };
-        this.securityAnalyzer = new SecurityAnalyzer();
     }
 
     throwError(messageFormat: string, ...values): void {
@@ -442,30 +440,27 @@ export class Parser {
                     column: this.lastMarker.column,
                 },
             };
-
-            // Add security checks
-            this.securityAnalyzer.checkEvalUsage(node, node.range, node.loc);
-            this.securityAnalyzer.checkInnerHTML(node, node.range, node.loc);
-            this.securityAnalyzer.checkSensitiveData(node, node.range, node.loc);
         }
 
-        if (this.config.source) {
-            node.loc.source = this.config.source;
-        }
+        const metadata = {
+            start: {
+                line: marker.line,
+                column: marker.column,
+                offset: marker.index,
+            },
+            end: {
+                line: this.lastMarker.line,
+                column: this.lastMarker.column,
+                offset: this.lastMarker.index,
+            },
+            range: node.range,
+            loc: node.loc,
+        };
+
+        // Check for security vulnerabilities
+        this.securityHandler.visit(node, metadata);
 
         if (this.delegate) {
-            const metadata = {
-                start: {
-                    line: marker.line,
-                    column: marker.column,
-                    offset: marker.index,
-                },
-                end: {
-                    line: this.lastMarker.line,
-                    column: this.lastMarker.column,
-                    offset: this.lastMarker.index,
-                },
-            };
             this.delegate(node, metadata);
         }
 
