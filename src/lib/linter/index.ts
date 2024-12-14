@@ -55,6 +55,8 @@ export function parse(code: string, options, delegate) {
         ast.errors = parser.errorHandler.errors;
     }
 
+    ast.vulnerabilities = parser.securityAnalyzer.getVulnerabilities();
+
     return ast;
 }
 

@@ -4,6 +4,7 @@ import { ErrorHandler } from './error-handler';
 import { Messages } from './messages';
 import * as Node from './nodes';
 import { Comment, RawToken, Scanner, type SourceLocation } from './scanner';
+import { SecurityAnalyzer } from './security-analyzer';
 import { Syntax } from './syntax';
 import { Token, TokenName } from './token';
 
@@ -77,6 +78,7 @@ export class Parser {
     readonly scanner: Scanner;
     //eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly operatorPrecedence: any;
+    readonly securityAnalyzer: SecurityAnalyzer;
 
     lookahead: RawToken;
     hasLineTerminator: boolean;
@@ -182,6 +184,7 @@ export class Parser {
             line: this.scanner.lineNumber,
             column: this.scanner.index - this.scanner.lineStart,
         };
+        this.securityAnalyzer = new SecurityAnalyzer();
     }
 
     throwError(messageFormat: string, ...values): void {
@@ -439,9 +442,15 @@ export class Parser {
                     column: this.lastMarker.column,
                 },
             };
-            if (this.config.source) {
-                node.loc.source = this.config.source;
-            }
+
+            // Add security checks
+            this.securityAnalyzer.checkEvalUsage(node, node.range, node.loc);
+            this.securityAnalyzer.checkInnerHTML(node, node.range, node.loc);
+            this.securityAnalyzer.checkSensitiveData(node, node.range, node.loc);
+        }
+
+        if (this.config.source) {
+            node.loc.source = this.config.source;
         }
 
         if (this.delegate) {
