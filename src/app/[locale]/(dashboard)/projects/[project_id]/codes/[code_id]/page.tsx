@@ -88,7 +88,7 @@ const AnalysisBlock = ({ projectId, codeId }: AnalysisBlockProps) => {
     }, [analysisResult]);
 
     return (
-        <div className='flex w-1/3 flex-col gap-2 rounded-lg bg-muted p-2'>
+        <div className='flex w-1/2 flex-col gap-2 rounded-lg bg-muted p-2'>
             <div className='flex items-center justify-between pl-3'>
                 <h2 className='text-base font-semibold text-accent-foreground/50'>
                     {t('labels.analysis_results')}
@@ -105,6 +105,7 @@ const AnalysisBlock = ({ projectId, codeId }: AnalysisBlockProps) => {
                             config: {
                                 tolerant: true,
                                 comment: true,
+                                security: true,
                                 range: true,
                                 loc: true,
                             },

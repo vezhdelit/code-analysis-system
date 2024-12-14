@@ -38,7 +38,7 @@ const TokenItem = ({ token }: { token: any }) => {
     };
 
     return (
-        <li className='flex flex-col rounded-md border border-blue-500/15 bg-blue-50 px-3 py-2 text-blue-500'>
+        <li className='flex flex-col rounded-md border border-blue-500/15 bg-blue-50 px-3 py-2 text-blue-500 dark:bg-blue-500/15'>
             <h3 className='text-sm font-bold'>{token.type}</h3>
             <div className='text-xs'>
                 {Object.entries(token).map(([key, value]) => {

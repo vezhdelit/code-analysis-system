@@ -116,6 +116,7 @@
             "tokens": "Токени",
             "comments": "Коментарі",
             "errors": "Помилки",
+            "vulnerabilities": "Вразливості",
 
             "toast_analysis": "Код успішно проаналізовано.",
             "toast_analysis_failed": "Не вдалося проаналізувати код."

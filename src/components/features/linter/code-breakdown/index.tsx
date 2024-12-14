@@ -1,6 +1,7 @@
 import CommentsSection from '@/components/features/linter/code-breakdown/comments-section';
 import ErrorSection from '@/components/features/linter/code-breakdown/errors-section';
 import TokensSection from '@/components/features/linter/code-breakdown/tokens-section';
+import VulnerabilitiesSection from '@/components/features/linter/code-breakdown/vulnerabilities-section';
 //eslint-disable-next-line @typescript-eslint/no-explicit-any
 const CodeBreakdown = ({ analysis }: { analysis: any }) => {
     if (!analysis) return null;
@@ -9,6 +10,7 @@ const CodeBreakdown = ({ analysis }: { analysis: any }) => {
             <TokensSection tokens={analysis.body} />
             <CommentsSection comments={analysis.comments} />
             <ErrorSection errors={analysis.errors} />
+            <VulnerabilitiesSection vulnerabilities={analysis.vulnerabilities} />
         </div>
     );
 };

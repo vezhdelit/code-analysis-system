@@ -116,6 +116,7 @@
             "tokens": "Tokens",
             "comments": "Comments",
             "errors": "Errors",
+            "vulnerabilities": "Vulnerabilities",
 
             "toast_analysis": "Code analyzed successfully.",
             "toast_analysis_failed": "Failed to analyze code."
