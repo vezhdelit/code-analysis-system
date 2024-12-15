@@ -25,6 +25,7 @@ export default function CodePage() {
     const t = useTranslations('codes');
 
     const updateCode = useUpdateCode();
+    const codeAnalysis = useAnalyzeCode();
 
     const [content, setContent] = useState('//Write your code here');
 
@@ -40,26 +41,66 @@ export default function CodePage() {
                 <div className='relative flex w-full flex-col rounded-lg bg-muted'>
                     <CodesTopbar projectId={projectId} codeId={codeId} />
                     <SimpleCodeEditor code={content} setCode={setContent} />
-                    <Button
-                        disabled={updateCode.isPending || content === code?.content}
-                        className='absolute bottom-4 right-4'
-                        onClick={() => {
-                            updateCode.mutate({
-                                param: { projectId, codeId },
-                                json: {
-                                    name: code?.name || '',
-                                    content,
-                                },
-                            });
-                        }}>
-                        <Loader2
-                            className={cn(
-                                'size-4 animate-spin',
-                                updateCode.isPending ? 'inline' : 'hidden'
-                            )}
-                        />
-                        {t('labels.save_code')}
-                    </Button>
+
+                    <div className='absolute bottom-4 right-4 flex gap-2'>
+                        {/* <Button
+                            disabled={updateCode.isPending || content === code?.content}
+                            onClick={() => {
+                                updateCode.mutate({
+                                    param: { projectId, codeId },
+                                    json: {
+                                        name: code?.name || '',
+                                        content,
+                                    },
+                                });
+                            }}>
+                            <Loader2
+                                className={cn(
+                                    'size-4 animate-spin',
+                                    updateCode.isPending ? 'inline' : 'hidden'
+                                )}
+                            />
+                            {t('labels.save_code')}
+                        </Button> */}
+
+                        <Button
+                            disabled={codeAnalysis.isPending || updateCode.isPending}
+                            onClick={async () => {
+                                updateCode
+                                    .mutateAsync({
+                                        param: { projectId, codeId },
+                                        json: {
+                                            name: code?.name || '',
+                                            content,
+                                        },
+                                    })
+                                    .then(() => {
+                                        codeAnalysis.mutate({
+                                            param: { projectId, codeId },
+                                            json: {
+                                                analysisType: 'parse',
+                                                config: {
+                                                    tolerant: true,
+                                                    comment: true,
+                                                    security: true,
+                                                    range: true,
+                                                    loc: true,
+                                                },
+                                            },
+                                        });
+                                    });
+                            }}>
+                            <Loader2
+                                className={cn(
+                                    'size-4 animate-spin',
+                                    codeAnalysis.isPending || updateCode.isPending
+                                        ? 'inline'
+                                        : 'hidden'
+                                )}
+                            />
+                            {t('labels.save_and_analyze_code')}
+                        </Button>
+                    </div>
                 </div>
                 <AnalysisBlock projectId={projectId} codeId={codeId} />
             </div>
@@ -73,7 +114,7 @@ interface AnalysisBlockProps {
 }
 const AnalysisBlock = ({ projectId, codeId }: AnalysisBlockProps) => {
     const { data: analysisResult } = useGetCodeAnalysisResults({ projectId, codeId });
-    const codeAnalysis = useAnalyzeCode();
+    // const codeAnalysis = useAnalyzeCode();
 
     const t = useTranslations('analysis');
 
@@ -94,7 +135,7 @@ const AnalysisBlock = ({ projectId, codeId }: AnalysisBlockProps) => {
                     {t('labels.analysis_results')}
                 </h2>
             </div>
-
+            {/* 
             <Button
                 disabled={codeAnalysis.isPending}
                 onClick={() => {
@@ -119,8 +160,8 @@ const AnalysisBlock = ({ projectId, codeId }: AnalysisBlockProps) => {
                     )}
                 />
                 {t('labels.analyze')}
-            </Button>
-            <ScrollArea className='h-[calc(100dvh-208px)] pr-3'>
+            </Button> */}
+            <ScrollArea className='h-[calc(100dvh-154px)] pr-3'>
                 <CodeBreakdown analysis={parsedToJsonResult} />
             </ScrollArea>
         </div>

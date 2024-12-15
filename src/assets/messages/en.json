@@ -101,8 +101,8 @@
             "toast_code_added": "Code added successfully.",
             "toast_code_added_failed": "Failed to add code.",
 
-            "toast_code_updated": "Code updated successfully.",
-            "toast_code_updated_failed": "Failed to update code.",
+            "toast_code_updated": "Code saved successfully.",
+            "toast_code_updated_failed": "Failed to saved code.",
 
             "toast_code_deleted": "Code deleted successfully.",
             "toast_code_deleted_failed": "Failed to delete code."

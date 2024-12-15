@@ -97,12 +97,13 @@
             "add_code": "Додати код",
 
             "save_code": "Зберегти код",
+            "save_and_analyze_code": "Зберегти та проаналізувати код",
 
             "toast_code_added": "Код успішно додано.",
             "toast_code_added_failed": "Не вдалося додати код.",
 
-            "toast_code_updated": "Код успішно оновлено.",
-            "toast_code_updated_failed": "Не вдалося оновити код.",
+            "toast_code_updated": "Код успішно збережено.",
+            "toast_code_updated_failed": "Не вдалося зберегти код.",
 
             "toast_code_deleted": "Код успішно видалено.",
             "toast_code_deleted_failed": "Не вдалося видалити код."
