@@ -6,16 +6,17 @@ import { useState } from 'react';
 import { FaCompressArrowsAlt, FaExpandArrowsAlt } from 'react-icons/fa';
 
 // Component to render a node and its children
-const ASTNode = ({ node }) => {
+//eslint-disable-next-line @typescript-eslint/no-explicit-any
+const ASTNode = ({ node }: { node: any }) => {
     // Determine the label for the node
     const label = node.type + (node.name ? `: ${node.name}` : '');
 
     return (
-        <div className='ml-5 flex flex-col border-l border-gray-300 pl-2'>
-            <strong className='text-blue-500'>
+        <div className='ml-3 flex flex-col border-l border-gray-400/40 pl-2'>
+            <strong className='text-sm text-blue-500'>
                 {label}{' '}
                 {node.loc && (
-                    <span className='text-sm'>
+                    <span className='text-xs'>
                         ({node.loc.start.line}:{node.loc.start.column} - {node.loc.end.line}:
                         {node.loc.end.column})
                     </span>
@@ -23,14 +24,14 @@ const ASTNode = ({ node }) => {
             </strong>
 
             {node.id && (
-                <div className='ml-5 border-l border-gray-300 pl-2 text-sm font-semibold text-gray-500 dark:text-gray-400'>
+                <div className='ml-3 border-l border-gray-400/40 pl-2 text-sm font-semibold text-gray-500 dark:text-gray-400'>
                     <span className='text-xs'> type: {node.id.type} </span>
                     <br />
                     <span className='text-xs'>name: {node.id.name}</span>
                 </div>
             )}
             {node.init && (
-                <div className='ml-5 mt-1 border-l border-gray-300 pl-2 text-sm font-semibold text-gray-500 dark:text-gray-400'>
+                <div className='ml-3 mt-1 border-l border-gray-400/40 pl-2 text-sm font-semibold text-gray-500 dark:text-gray-400'>
                     <span className='text-xs'>type: {node.init.type} </span> <br />
                     <span className='text-xs'>value: {node.init.value}</span>
                 </div>
@@ -44,17 +45,25 @@ const ASTNode = ({ node }) => {
 
             {/* Recursively render children */}
             {Array.isArray(node.declarations) &&
-                node.declarations.map((child, index) => <ASTNode node={child} key={index} />)}
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                node.declarations.map((child: any, index: number) => (
+                    <ASTNode node={child} key={index} />
+                ))}
             {Array.isArray(node.params) &&
-                node.params.map((param, index) => <ASTNode node={param} key={index} />)}
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                node.params.map((param: any, index: number) => (
+                    <ASTNode node={param} key={index} />
+                ))}
             {Array.isArray(node.body) &&
-                node.body.map((child, index) => <ASTNode node={child} key={index} />)}
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                node.body.map((child: any, index: number) => <ASTNode node={child} key={index} />)}
         </div>
     );
 };
 
 // Main component to visualize the AST
-const ASTTree = ({ ast }) => {
+//eslint-disable-next-line @typescript-eslint/no-explicit-any
+const ASTTree = ({ ast }: { ast: any }) => {
     const [selectedType, setSelectedType] = useState('minimize');
     const t = useTranslations('analysis');
 
@@ -67,7 +76,7 @@ const ASTTree = ({ ast }) => {
                 className='text-blue-500'
                 header={
                     <h2 className='pl-2 text-base font-semibold'>
-                        {t('labels.tokens')} ({ast.body.length})
+                        {t('labels.ast')} ({ast.body.length})
                     </h2>
                 }>
                 <div className='relative'>

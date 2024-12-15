@@ -15,7 +15,7 @@ const TokensSection = ({ tokens }: { tokens: any }) => {
                 className='text-blue-500'
                 header={
                     <h2 className='pl-2 text-base font-semibold'>
-                        {t('labels.tokens')} ({tokens.length})
+                        {t('labels.ast')} ({tokens.length})
                     </h2>
                 }>
                 <ul className='space-y-1'>

@@ -114,6 +114,7 @@
             "analyze": "Analyze",
 
             "tokens": "Tokens",
+            "ast": "Syntax Tree",
             "comments": "Comments",
             "errors": "Errors",
             "vulnerabilities": "Vulnerabilities",

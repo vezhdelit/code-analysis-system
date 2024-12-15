@@ -123,7 +123,7 @@ const AnalysisBlock = ({ projectId, codeId }: AnalysisBlockProps) => {
         if (typeof analysisResult.resultData === 'object') return analysisResult.resultData;
         try {
             return JSON.parse(analysisResult.resultData);
-        } catch (e) {
+        } catch {
             return null;
         }
     }, [analysisResult]);
