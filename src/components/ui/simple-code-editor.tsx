@@ -12,7 +12,6 @@ export function SimpleCodeEditor({
     setCode: (code: string) => void;
 }) {
     const { theme } = useTheme();
-    const lines = code.split('\n');
 
     useEffect(() => {
         loader.init().then(monaco => {
