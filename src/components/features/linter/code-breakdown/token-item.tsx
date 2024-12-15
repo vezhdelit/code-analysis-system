@@ -7,11 +7,7 @@ const TokenItem = ({ token }: { token: any }) => {
                 <ul className='pl-4'>
                     {value.map((item, index) => {
                         if (typeof item === 'object' && item !== null) {
-                            return (
-                                <li key={index}>
-                                    <TokenItem token={item} />
-                                </li>
-                            );
+                            return <TokenItem key={index} token={item} />;
                         } else {
                             return (
                                 <li key={index}>
